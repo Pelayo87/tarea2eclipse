@@ -6,8 +6,16 @@ public class Planta implements Serializable {
     private String codigo;
     private String nombrecomun;
     private String nombrecientifico;
+    
 
-    public String getCodigo() {
+    public Planta(String codigo, String nombrecomun, String nombrecientifico) {
+		super();
+		this.codigo = codigo;
+		this.nombrecomun = nombrecomun;
+		this.nombrecientifico = nombrecientifico;
+	}
+
+	public String getCodigo() {
         return codigo;
     }
 

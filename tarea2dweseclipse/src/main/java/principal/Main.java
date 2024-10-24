@@ -1,91 +1,48 @@
 package principal;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Properties;
 import java.util.Scanner;
 
-import com.mysql.cj.jdbc.MysqlDataSource;
-
+import conexion.ConexionBD;
 import modelo.Planta;
 
-/**
- * Hello world!
- *
- */
-public class Main
-{
-    public static void main( String[] args )
-    {
+public class Main {
+    public static void main(String[] args) {
         System.out.println("INICIO");
         
+        // Recoger datos de entrada del usuario
         Scanner in = new Scanner(System.in);
-        System.out.println("Dame el codigo de la nueva planta:");
+        System.out.println("Dame el código de la nueva planta:");
         String codigo = in.nextLine().trim().toUpperCase();
         System.out.println("Dame el nombre común de la planta:");
         String nombrecomun = in.nextLine().trim().toUpperCase();
         System.out.println("Dame el nombre científico de la planta:");
         String nombrecientifico = in.nextLine().trim().toUpperCase();
         
-        Planta nuevaplanta = new Planta(codigo,nombrecomun,nombrecientifico);
+        Planta nuevaplanta = new Planta(codigo, nombrecomun, nombrecientifico);
         
-        Connection con;
-        MysqlDataSource msds=new MysqlDataSource();
-        Properties prop = null;
-        FileInputStream fis;
-        
-        String url;
-        String user;
-        String password;
-        
-        try {
-            fis = new FileInputStream("src/main/resources/db.properties");
-            prop.load(fis);
-            url = prop.getProperty("url");
-            user = prop.getProperty("user");
-            password = prop.getProperty("password");
-            msds.setUrl(url);
-            msds.setUser(user);
-            msds.setPassword(password);
+        // Conexión a la base de datos
+        try (Connection con = ConexionBD.getConexion()) {
+            String sql2 = "INSERT INTO plantas (codigo, nombrecomun, nombrecientifico) VALUES (?, ?, ?)";
             
-            con = msds.getConnection();
-            
-            String sql = "insert into PLANTAS(codigo,nombrecomun,nombrecientifico) VALUES('" 
-                         + nuevaplanta.getCodigo() + "', '" 
-                         + nuevaplanta.getNombrecomun() + "', '" 
-                         + nuevaplanta.getNombrecientifico() + "')";
-            
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.execute();
-            
-            con.close();
-            
-        } catch (FileNotFoundException e) {
-            System.out.println("Error: No se encontró el archivo de configuración 'db.properties'.");
-            e.printStackTrace();
-            
+            try (PreparedStatement ps = con.prepareStatement(sql2)) {
+                ps.setString(1, nuevaplanta.getCodigo());
+                ps.setString(2, nuevaplanta.getNombrecomun());
+                ps.setString(3, nuevaplanta.getNombrecientifico());
+                ps.execute();
+                System.out.println("Planta insertada correctamente.");
+            }
         } catch (IOException e) {
-            System.out.println("Error: Ocurrió un problema al leer el archivo de configuración.");
+            System.out.println("Error: Problema al leer el archivo de configuración.");
             e.printStackTrace();
-            
         } catch (SQLException e) {
-            System.out.println("Error: No se pudo establecer la conexión con la base de datos o se produjo un error en la ejecución de la consulta.");
+            System.out.println("Error: Problema al conectar o insertar en la base de datos.");
             e.printStackTrace();
         }
-
-        
-        
-        //String url = "jdbc:mysql://localhost:3306/tarea2dwes";
-        // String user="root";
- 	    //String password="";
- 	    
         
         System.out.println("FIN");
-        
     }
 }

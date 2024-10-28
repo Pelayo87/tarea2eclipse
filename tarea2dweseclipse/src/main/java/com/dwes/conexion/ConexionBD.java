@@ -1,4 +1,4 @@
-package conexion;
+package com.dwes.conexion;
 
 import java.io.FileInputStream;
 import java.io.IOException;

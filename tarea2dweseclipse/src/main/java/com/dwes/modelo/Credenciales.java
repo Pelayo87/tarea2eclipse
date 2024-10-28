@@ -1,4 +1,4 @@
-package modelo;
+package com.dwes.modelo;
 
 public class Credenciales {
     private long id;

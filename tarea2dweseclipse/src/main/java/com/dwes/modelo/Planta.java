@@ -1,9 +1,13 @@
-package modelo;
+package com.dwes.modelo;
 
 import java.io.Serializable;
 
 public class Planta implements Serializable {
-    private String codigo;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String codigo;
     private String nombrecomun;
     private String nombrecientifico;
     

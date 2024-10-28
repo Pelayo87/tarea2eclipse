@@ -1,15 +1,17 @@
-package daoImpl;
+package com.dwes.daoImpl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import dao.EjemplarDAO;
-import modelo.Ejemplar;
+import com.dwes.dao.EjemplarDAO;
+import com.dwes.modelo.Ejemplar;
 
 public class EjemplarDAOImpl implements EjemplarDAO {
     private Connection con;
     PreparedStatement ps;
+    private ResultSet rs;
 
     public EjemplarDAOImpl(Connection con) {
         this.con = con;

@@ -1,17 +1,19 @@
-package daoImpl;
+package com.dwes.daoImpl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
-import dao.MensajeDAO;
-import modelo.Mensaje;
+import com.dwes.dao.MensajeDAO;
+import com.dwes.modelo.Mensaje;
 
 public class MensajeDAOImpl implements MensajeDAO{
 
 	private Connection con;
     PreparedStatement ps;
+    private ResultSet rs;
 
     public MensajeDAOImpl(Connection con) {
         this.con = con;

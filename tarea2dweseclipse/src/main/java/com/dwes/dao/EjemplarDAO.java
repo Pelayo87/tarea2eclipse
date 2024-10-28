@@ -1,6 +1,6 @@
-package dao;
+package com.dwes.dao;
 
-import modelo.Ejemplar;
+import com.dwes.modelo.Ejemplar;
 
 public interface EjemplarDAO {
     int insertar(Ejemplar ejemplar);

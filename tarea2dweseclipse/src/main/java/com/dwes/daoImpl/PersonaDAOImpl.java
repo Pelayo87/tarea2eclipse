@@ -1,16 +1,18 @@
-package daoImpl;
+package com.dwes.daoImpl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import dao.PersonaDAO;
-import modelo.Persona;
+import com.dwes.dao.PersonaDAO;
+import com.dwes.modelo.Persona;
 
 public class PersonaDAOImpl implements PersonaDAO{
-	private Connection con;
 	
-	PreparedStatement ps;
+	private Connection con;
+    PreparedStatement ps;
+    private ResultSet rs;
 
 	@Override
 	public int insertar(Persona persona) {

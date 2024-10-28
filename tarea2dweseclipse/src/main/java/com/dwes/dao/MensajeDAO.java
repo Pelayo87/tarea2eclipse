@@ -1,6 +1,6 @@
-package dao;
+package com.dwes.dao;
 
-import modelo.Mensaje;
+import com.dwes.modelo.Mensaje;
 
 public interface MensajeDAO {
     int insertar(Mensaje mensaje);

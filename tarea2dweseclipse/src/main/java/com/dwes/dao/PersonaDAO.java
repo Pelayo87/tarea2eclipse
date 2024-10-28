@@ -1,6 +1,6 @@
-package dao;
+package com.dwes.dao;
 
-import modelo.Persona;
+import com.dwes.modelo.Persona;
 
 public interface PersonaDAO {
     int insertar(Persona persona);

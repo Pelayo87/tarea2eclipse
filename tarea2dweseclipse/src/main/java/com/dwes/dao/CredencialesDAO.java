@@ -1,6 +1,6 @@
-package dao;
+package com.dwes.dao;
 
-import modelo.Credenciales;
+import com.dwes.modelo.Credenciales;
 
 public interface CredencialesDAO {
     int insertar(Credenciales credenciales);

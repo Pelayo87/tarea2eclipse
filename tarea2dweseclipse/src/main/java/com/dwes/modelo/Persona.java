@@ -1,14 +1,15 @@
-package modelo;
+package com.dwes.modelo;
 
-public class Ejemplar {
-    private Long id;
+public class Persona {
+    private long id;
     private String nombre;
+    private String email;
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -20,11 +21,20 @@ public class Ejemplar {
         this.nombre = nombre;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Override
     public String toString() {
-        return "Ejemplar{" +
+        return "Persona{" +
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
+                ", email='" + email + '\'' +
                 '}';
     }
 }

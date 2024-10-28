@@ -1,16 +1,17 @@
-package daoImpl;
+package com.dwes.daoImpl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import dao.CredencialesDAO;
-import modelo.Credenciales;
+import com.dwes.dao.CredencialesDAO;
+import com.dwes.modelo.Credenciales;
 
 public class CredencialesDAOImpl implements CredencialesDAO{
-
 	private Connection con;
     PreparedStatement ps;
+    private ResultSet rs;
 
     public CredencialesDAOImpl(Connection con) {
         this.con = con;

@@ -1,4 +1,4 @@
-package modelo;
+package com.dwes.modelo;
 
 import java.util.Date;
 

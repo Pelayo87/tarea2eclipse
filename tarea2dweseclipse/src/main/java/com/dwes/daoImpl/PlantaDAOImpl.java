@@ -6,8 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
-
-import com.dwes.conexion.ConexionBD;
 import com.dwes.dao.PlantaDAO;
 import com.dwes.modelo.Planta;
 
@@ -31,7 +29,6 @@ public class PlantaDAOImpl implements PlantaDAO{
             ps.setString(3, planta.getNombrecientifico());
             ps.executeUpdate();
             System.out.println("Planta insertada correctamente.");
-            return 1;
         } catch (SQLException e) {
             System.out.println("Error al insertar la planta: " + e.getMessage());
         }
@@ -55,17 +52,15 @@ public class PlantaDAOImpl implements PlantaDAO{
 
 	@Override
 	public int eliminar(Planta planta) {
-		try {
-		    ps=con.prepareStatement("UPDATE planta SET nombrecomun = ?, nombrecientifico = ? WHERE codigo = ?");
-		    ps.setString(1, planta.getNombrecomun());
-            ps.setString(2, planta.getNombrecientifico());
-            ps.setString(3, planta.getCodigo());
-            ps.execute();
-            System.out.println("Planta modificada correctamente.");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
+	    try {
+	        ps = con.prepareStatement("DELETE FROM planta WHERE codigo = ?");
+	        ps.setString(1, planta.getCodigo());
+	        ps.executeUpdate();
+	        System.out.println("Planta eliminada correctamente.");
+	    } catch (SQLException e) {
+	        System.out.println("Error al eliminar la planta: " + e.getMessage());
+	    }
+	    return 0;
 	}
 
 	@Override

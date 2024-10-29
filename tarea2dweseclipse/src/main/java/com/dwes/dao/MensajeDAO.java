@@ -3,10 +3,10 @@ package com.dwes.dao;
 import com.dwes.modelo.Mensaje;
 
 public interface MensajeDAO {
-    int insertar(Mensaje mensaje);
+    public int insertar(Mensaje mensaje);
 	
-	int modificar(Mensaje mensaje);
+	public int modificar(Mensaje mensaje);
 	
-	int eliminar(Mensaje mensaje);
+	public int eliminar(Mensaje mensaje);
 
 }

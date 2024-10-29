@@ -5,10 +5,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.Set;
-
-import com.dwes.conexion.ConexionBD;
 import com.dwes.daoImpl.PlantaDAOImpl;
 import com.dwes.modelo.Planta;
+import com.dwes.util.MySqlDAOFactory;
 
 public class Principal {
 	Scanner sc = new Scanner(System.in);
@@ -17,9 +16,8 @@ public class Principal {
 		m.iniciosesion();
 	}
 	
-	//Ver Plantas para el perfil de invitado
+	
 	public void iniciosesion(){
-		//MENU PRINCIPAL TRAS LOGUEARTE CORRECTAMENTE
         int opcion = 0;
 		do {
 			System.out.println("\n\n\n\n\n\t\t\t\tINICIO DE SESIÓN\n");
@@ -39,9 +37,10 @@ public class Principal {
 				break;
 			}
 			}
-		} while (opcion != 4);
+		} while (opcion != 3);
 	}
 	
+	//Ver Plantas para el perfil de invitado
 	public void verplantasinvitado() {
 		int opcion = 0;
 		do {
@@ -83,6 +82,10 @@ public class Principal {
 				modificarPlanta();
 				break;
 			}
+			case 3: {
+				eliminarPlanta();
+				break;
+			}
 			}
 		} while (opcion != 4);
 	}
@@ -101,7 +104,7 @@ public class Principal {
         System.out.println(nuevaplanta);
 
         // Obtengo la conexión a la base de datos
-        try (Connection conexion = ConexionBD.getConexion()) {
+        try (Connection conexion = MySqlDAOFactory.getConexion()) {
             // Paso la conexión al constructor de PlantaDAOImpl
             PlantaDAOImpl plantaDAO = new PlantaDAOImpl(conexion);
             int insertar = plantaDAO.insertar(nuevaplanta);
@@ -124,7 +127,7 @@ public class Principal {
         System.out.println(cambioplanta);
 
         // Obtengo la conexión a la base de datos
-        try (Connection conexion = ConexionBD.getConexion()) {
+        try (Connection conexion = MySqlDAOFactory.getConexion()) {
             // Paso la conexión al constructor de PlantaDAOImpl
             PlantaDAOImpl plantaDAO = new PlantaDAOImpl(conexion);
             int insertar = plantaDAO.modificar(cambioplanta);
@@ -133,9 +136,27 @@ public class Principal {
         }
      }
 	
+	private void eliminarPlanta() {   
+        //ELIMINAR PLANTA
+        
+        System.out.println("Dame el código de la planta a modificar:");
+        String codigo = sc.nextLine().trim().toUpperCase();
+
+        Planta eliminarplanta = new Planta(codigo,null,null);
+
+        // Obtengo la conexión a la base de datos
+        try (Connection conexion = MySqlDAOFactory.getConexion()) {
+            // Paso la conexión al constructor de PlantaDAOImpl
+            PlantaDAOImpl plantaDAO = new PlantaDAOImpl(conexion);
+            int eliminar = plantaDAO.eliminar(eliminarplanta);
+        } catch (SQLException | IOException e) {
+            System.out.println("Error al conectar con la base de datos: " + e.getMessage());
+        }
+     }
+	
 	private void mostrarPlantas() {   
 	    // MOSTRAR PLANTAS
-	    try (Connection conexion = ConexionBD.getConexion()) {
+	    try (Connection conexion = MySqlDAOFactory.getConexion()) {
 	        PlantaDAOImpl plantaDAO = new PlantaDAOImpl(conexion);
 	        Set<Planta> plantas = plantaDAO.find();
 	        
@@ -147,6 +168,4 @@ public class Principal {
 	        System.out.println("Error al conectar con la base de datos: " + e.getMessage());
 	    }
 	}
-
-
 }

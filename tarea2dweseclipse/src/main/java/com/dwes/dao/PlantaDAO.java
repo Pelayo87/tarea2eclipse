@@ -12,6 +12,7 @@ public interface PlantaDAO {
 	int eliminar(Planta planta);
 	
 	Planta findById(String codigo);
+	
 	Planta findByNombre(String nombrecomun);
 	
 	Set<Planta> find();

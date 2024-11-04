@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-10-2024 a las 12:51:07
+-- Tiempo de generación: 04-11-2024 a las 11:06:01
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `tarea2dwes`
 --
+CREATE DATABASE IF NOT EXISTS `tarea2dwes` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `tarea2dwes`;
 
 -- --------------------------------------------------------
 
@@ -33,6 +35,14 @@ CREATE TABLE `credenciales` (
   `password` varchar(50) NOT NULL,
   `id_persona` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `credenciales`
+--
+
+INSERT INTO `credenciales` (`id`, `usuario`, `password`, `id_persona`) VALUES
+(1, 'admin', 'admin', 1),
+(2, 'tumeme', 'tumeme123', NULL);
 
 -- --------------------------------------------------------
 
@@ -72,6 +82,14 @@ CREATE TABLE `persona` (
   `email` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `persona`
+--
+
+INSERT INTO `persona` (`id`, `nombre`, `email`) VALUES
+(1, 'admin', 'admin@gmail.com'),
+(4, 'tumeme', 'tumeme@gmail.com');
+
 -- --------------------------------------------------------
 
 --
@@ -83,6 +101,14 @@ CREATE TABLE `planta` (
   `nombrecomun` varchar(100) DEFAULT NULL,
   `nombrecientifico` varchar(150) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `planta`
+--
+
+INSERT INTO `planta` (`codigo`, `nombrecomun`, `nombrecientifico`) VALUES
+('1', 'ROSA', 'ROSAURA'),
+('2', 'MARGARITA', 'MARGARINE');
 
 -- --------------------------------------------------------
 
@@ -151,7 +177,7 @@ ALTER TABLE `seguimiento`
 -- AUTO_INCREMENT de la tabla `credenciales`
 --
 ALTER TABLE `credenciales`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `ejemplar`
@@ -169,7 +195,7 @@ ALTER TABLE `mensaje`
 -- AUTO_INCREMENT de la tabla `persona`
 --
 ALTER TABLE `persona`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Restricciones para tablas volcadas

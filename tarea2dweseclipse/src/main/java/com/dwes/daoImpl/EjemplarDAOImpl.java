@@ -33,12 +33,6 @@ public class EjemplarDAOImpl implements EjemplarDAO {
             System.out.println("Ejemplar insertado correctamente.");
         } catch (SQLException e) {
             System.out.println("Error al insertar el ejemplar: " + e.getMessage());
-        }finally {
-        	try {
-                con.close();
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar la conexión: " + e.getMessage());
-            }
         }
         return resultado;
     }
@@ -56,12 +50,6 @@ public class EjemplarDAOImpl implements EjemplarDAO {
             System.out.println("Ejemplar modificado correctamente.");
         } catch (SQLException e) {
             System.out.println("Error al modificar el ejemplar: " + e.getMessage());
-        }finally {
-        	try {
-                con.close();
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar la conexión: " + e.getMessage());
-            }
         }
         return resultado;
     }
@@ -77,12 +65,6 @@ public class EjemplarDAOImpl implements EjemplarDAO {
             System.out.println("Ejemplar eliminado correctamente.");
         } catch (SQLException e) {
             System.out.println("Error al eliminar el ejemplar: " + e.getMessage());
-        }finally {
-        	try {
-                con.close();
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar la conexión: " + e.getMessage());
-            }
         }
         return resultado;
     }
@@ -102,12 +84,6 @@ public class EjemplarDAOImpl implements EjemplarDAO {
             }
         } catch (SQLException e) {
             System.out.println("Error al buscar el ejemplar: " + e.getMessage());
-        }finally {
-        	try {
-                con.close();
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar la conexión: " + e.getMessage());
-            }
         }
         return ejemplar;
     }
@@ -128,12 +104,6 @@ public class EjemplarDAOImpl implements EjemplarDAO {
             }
         } catch (SQLException e) {
             System.out.println("Error al buscar todos los ejemplares: " + e.getMessage());
-        }finally {
-        	try {
-                con.close();
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar la conexión: " + e.getMessage());
-            }
         }
         return ejemplares;
     }
@@ -160,12 +130,6 @@ public class EjemplarDAOImpl implements EjemplarDAO {
             }
         } catch (SQLException e) {
             System.out.println("Error al buscar el ejemplar con su planta: " + e.getMessage());
-        }finally {
-        	try {
-                con.close();
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar la conexión: " + e.getMessage());
-            }
         }
         return ejemplar;
     }

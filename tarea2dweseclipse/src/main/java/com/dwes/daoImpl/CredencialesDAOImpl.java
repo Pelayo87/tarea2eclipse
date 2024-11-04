@@ -32,12 +32,6 @@ public class CredencialesDAOImpl implements CredencialesDAO{
             System.out.println("Credenciales insertadas correctamente.");
         } catch (SQLException e) {
             System.out.println("Error al insertar las credenciales: " + e.getMessage());
-        }finally {
-        	try {
-                con.close();
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar la conexión: " + e.getMessage());
-            }
         }
         return resultado;
     }
@@ -55,12 +49,6 @@ public class CredencialesDAOImpl implements CredencialesDAO{
             System.out.println("Credenciales modificadas correctamente.");
         } catch (SQLException e) {
             System.out.println("Error al modificar las credenciales: " + e.getMessage());
-        }finally {
-        	try {
-                con.close();
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar la conexión: " + e.getMessage());
-            }
         }
         return resultado;
     }
@@ -76,12 +64,6 @@ public class CredencialesDAOImpl implements CredencialesDAO{
             System.out.println("Credenciales eliminadas correctamente.");
         } catch (SQLException e) {
             System.out.println("Error al eliminar las credenciales: " + e.getMessage());
-        }finally {
-        	try {
-                con.close();
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar la conexión: " + e.getMessage());
-            }
         }
         return resultado;
     }
@@ -102,12 +84,6 @@ public class CredencialesDAOImpl implements CredencialesDAO{
             }
         } catch (SQLException e) {
             System.out.println("Error al buscar las credenciales por ID: " + e.getMessage());
-        }finally {
-        	try {
-                con.close();
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar la conexión: " + e.getMessage());
-            }
         }
         return credenciales;
     }
@@ -128,12 +104,6 @@ public class CredencialesDAOImpl implements CredencialesDAO{
             }
         } catch (SQLException e) {
             System.out.println("Error al buscar credenciales por persona ID: " + e.getMessage());
-        }finally {
-        	try {
-                con.close();
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar la conexión: " + e.getMessage());
-            }
         }
         return credenciales;
     }
@@ -154,12 +124,6 @@ public class CredencialesDAOImpl implements CredencialesDAO{
             }
         } catch (SQLException e) {
             System.out.println("Error al buscar las credenciales por usuario: " + e.getMessage());
-        }finally {
-        	try {
-                con.close();
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar la conexión: " + e.getMessage());
-            }
         }
         return credenciales;
     }

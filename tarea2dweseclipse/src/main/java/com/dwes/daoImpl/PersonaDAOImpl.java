@@ -34,12 +34,6 @@ public class PersonaDAOImpl implements PersonaDAO{
             System.out.println("Persona insertada correctamente.");
         } catch (SQLException e) {
             System.out.println("Error al insertar la persona: " + e.getMessage());
-        }finally {
-        	try {
-                con.close();
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar la conexión: " + e.getMessage());
-            }
         }
         return resultado;
     }
@@ -57,12 +51,6 @@ public class PersonaDAOImpl implements PersonaDAO{
             System.out.println("Persona modificada correctamente.");
         } catch (SQLException e) {
             System.out.println("Error al modificar la persona: " + e.getMessage());
-        }finally {
-        	try {
-                con.close();
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar la conexión: " + e.getMessage());
-            }
         }
         return resultado;
     }
@@ -78,12 +66,6 @@ public class PersonaDAOImpl implements PersonaDAO{
             System.out.println("Persona eliminada correctamente.");
         } catch (SQLException e) {
             System.out.println("Error al eliminar la persona: " + e.getMessage());
-        }finally {
-        	try {
-                con.close();
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar la conexión: " + e.getMessage());
-            }
         }
         return resultado;
     }
@@ -104,12 +86,6 @@ public class PersonaDAOImpl implements PersonaDAO{
             }
         } catch (SQLException e) {
             System.out.println("Error al buscar la persona por ID: " + e.getMessage());
-        }finally {
-        	try {
-                con.close();
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar la conexión: " + e.getMessage());
-            }
         }
         return persona;
     }
@@ -130,12 +106,6 @@ public class PersonaDAOImpl implements PersonaDAO{
             }
         } catch (SQLException e) {
             System.out.println("Error al buscar la persona por nombre: " + e.getMessage());
-        }finally {
-        	try {
-                con.close();
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar la conexión: " + e.getMessage());
-            }
         }
         return persona;
     }
@@ -156,12 +126,6 @@ public class PersonaDAOImpl implements PersonaDAO{
             }
         } catch (SQLException e) {
             System.out.println("Error al buscar todas las personas: " + e.getMessage());
-        }finally {
-        	try {
-                con.close();
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar la conexión: " + e.getMessage());
-            }
         }
         return personas;
     }

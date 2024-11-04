@@ -37,12 +37,6 @@ public class MensajeDAOImpl implements MensajeDAO {
             System.out.println("Mensaje insertado correctamente.");
         } catch (SQLException e) {
             System.out.println("Error al insertar el mensaje: " + e.getMessage());
-        } finally {
-            try {
-                ps.close();
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar la conexión: " + e.getMessage());
-            }
         }
         return resultado;
     }
@@ -63,12 +57,6 @@ public class MensajeDAOImpl implements MensajeDAO {
             System.out.println("Mensaje modificado correctamente.");
         } catch (SQLException e) {
             System.out.println("Error al modificar el mensaje: " + e.getMessage());
-        } finally {
-            try {
-                ps.close();
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar la conexión: " + e.getMessage());
-            }
         }
         return resultado;
     }
@@ -83,12 +71,6 @@ public class MensajeDAOImpl implements MensajeDAO {
             System.out.println("Mensaje eliminado correctamente.");
         } catch (SQLException e) {
             System.out.println("Error al eliminar el mensaje: " + e.getMessage());
-        } finally {
-            try {
-                ps.close();
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar la conexión: " + e.getMessage());
-            }
         }
         return resultado;
     }
@@ -115,12 +97,6 @@ public class MensajeDAOImpl implements MensajeDAO {
             }
         } catch (SQLException e) {
             System.out.println("Error al buscar el mensaje por ID: " + e.getMessage());
-        } finally {
-            try {
-                ps.close();
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar la conexión: " + e.getMessage());
-            }
         }
         return mensaje;
     }
@@ -148,12 +124,6 @@ public class MensajeDAOImpl implements MensajeDAO {
             }
         } catch (SQLException e) {
             System.out.println("Error al buscar mensajes por ejemplar ID: " + e.getMessage());
-        } finally {
-            try {
-                ps.close();
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar la conexión: " + e.getMessage());
-            }
         }
         return mensajes;
     }
@@ -180,12 +150,6 @@ public class MensajeDAOImpl implements MensajeDAO {
             }
         } catch (SQLException e) {
             System.out.println("Error al buscar todos los mensajes: " + e.getMessage());
-        } finally {
-            try {
-                ps.close();
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar la conexión: " + e.getMessage());
-            }
         }
         return mensajes;
     }

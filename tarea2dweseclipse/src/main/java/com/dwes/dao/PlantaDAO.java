@@ -22,5 +22,7 @@ public interface PlantaDAO {
     int contarEjemplares(String codigo);
     
     Set<Planta> find();
+    
+    boolean ExisteCodigo(String codigo);
 }
 

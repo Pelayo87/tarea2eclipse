@@ -17,5 +17,6 @@ public interface ServicioPlanta {
 	Planta findByNombre(String nombrecomun);
 	
 	Set<Planta> find();
-
+	
+	 boolean ExisteCodigo(String codigo);
 }

@@ -32,12 +32,6 @@ public class PlantaDAOImpl implements PlantaDAO{
             System.out.println("Planta insertada correctamente.");
         } catch (SQLException e) {
             System.out.println("Error al insertar la planta: " + e.getMessage());
-        }finally {
-        	try {
-                con.close();
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar la conexión: " + e.getMessage());
-            }
         }
         return 0;
     }
@@ -53,12 +47,6 @@ public class PlantaDAOImpl implements PlantaDAO{
 	            System.out.println("Planta modificada correctamente.");
 	        } catch (SQLException e) {
 	            e.printStackTrace();
-	        }finally {
-	        	try {
-	                con.close();
-	            } catch (SQLException e) {
-	                System.out.println("Error al cerrar la conexión: " + e.getMessage());
-	            }
 	        }
 	        return 0;
 	}
@@ -72,13 +60,7 @@ public class PlantaDAOImpl implements PlantaDAO{
 	        System.out.println("Planta eliminada correctamente.");
 	    } catch (SQLException e) {
 	        System.out.println("Error al eliminar la planta: " + e.getMessage());
-	    }finally {
-        	try {
-                con.close();
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar la conexión: " + e.getMessage());
-            }
-        }
+	    }
 	    return 0;
 	}
 
@@ -96,13 +78,7 @@ public class PlantaDAOImpl implements PlantaDAO{
 	        }
 	    } catch (SQLException e) {
 	        System.out.println("Error al buscar la planta: " + e.getMessage());
-	    }finally {
-        	try {
-                con.close();
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar la conexión: " + e.getMessage());
-            }
-        }
+	    }
 	    return planta;
 	}
 
@@ -127,15 +103,26 @@ public class PlantaDAOImpl implements PlantaDAO{
 	        }
 	    } catch (SQLException e) {
 	        System.out.println("Error al obtener las plantas: " + e.getMessage());
-	    }finally {
-        	try {
-                con.close();
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar la conexión: " + e.getMessage());
-            }
-        }
+	    }
 	    return plantas;
 	}
+	
+	@Override
+	public boolean ExisteCodigo(String codigo) {
+	    boolean exists = false;
+	    try {
+	        ps = con.prepareStatement("SELECT COUNT(*) FROM planta WHERE codigo = ?");
+	        ps.setString(1, codigo);
+	        rs = ps.executeQuery();
+	        if (rs.next()) {
+	            exists = rs.getInt(1) > 0;
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error al verificar la existencia del código: " + e.getMessage());
+	    }
+	    return exists;
+	}
+
 
 	@Override
 	public Planta findByNombreCientifico(String nombrecientifico) {

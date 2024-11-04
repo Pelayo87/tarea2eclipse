@@ -1,6 +1,7 @@
 package com.dwes.modelo;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Set;
 
 public class Planta implements Serializable {
@@ -66,6 +67,27 @@ public class Planta implements Serializable {
                 ", nombrecientifico='" + nombrecientifico + '\'' +
                 '}';
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(codigo, ejemplares, nombrecientifico, nombrecomun);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Planta other = (Planta) obj;
+		return Objects.equals(codigo, other.codigo) && Objects.equals(ejemplares, other.ejemplares)
+				&& Objects.equals(nombrecientifico, other.nombrecientifico)
+				&& Objects.equals(nombrecomun, other.nombrecomun);
+	}
+    
 }
+
 
 

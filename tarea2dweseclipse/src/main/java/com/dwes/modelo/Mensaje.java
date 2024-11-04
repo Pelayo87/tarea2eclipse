@@ -1,6 +1,7 @@
 package com.dwes.modelo;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Mensaje {
     private Long id;
@@ -58,8 +59,14 @@ public class Mensaje {
         this.ejemplar = ejemplar;
     }
     
-    
+    public Persona getPersona() {
+		return persona;
+	}
 
+	public void setPersona(Persona persona) {
+		this.persona = persona;
+	}
+    
     @Override
     public String toString() {
         return "Mensaje{" +
@@ -69,12 +76,24 @@ public class Mensaje {
                 '}';
     }
 
-	public Persona getPersona() {
-		return persona;
+	@Override
+	public int hashCode() {
+		return Objects.hash(ejemplar, fechahora, id, mensaje, persona);
 	}
 
-	public void setPersona(Persona persona) {
-		this.persona = persona;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Mensaje other = (Mensaje) obj;
+		return Objects.equals(ejemplar, other.ejemplar) && Objects.equals(fechahora, other.fechahora)
+				&& Objects.equals(id, other.id) && Objects.equals(mensaje, other.mensaje)
+				&& Objects.equals(persona, other.persona);
 	}
+	
 }
 

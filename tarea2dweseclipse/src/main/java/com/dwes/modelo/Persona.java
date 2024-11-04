@@ -1,5 +1,6 @@
 package com.dwes.modelo;
 
+import java.util.Objects;
 import java.util.Set;
 
 public class Persona {
@@ -74,5 +75,25 @@ public class Persona {
                 ", email='" + email + '\'' +
                 '}';
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(credenciales, ejemplares, email, id, nombre);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Persona other = (Persona) obj;
+		return Objects.equals(credenciales, other.credenciales) && Objects.equals(ejemplares, other.ejemplares)
+				&& Objects.equals(email, other.email) && id == other.id && Objects.equals(nombre, other.nombre);
+	}
+    
+    
 }
 

@@ -1,5 +1,7 @@
 package com.dwes.modelo;
 
+import java.util.Objects;
+
 public class Credenciales {
     private long id;
     private String usuario;
@@ -66,4 +68,24 @@ public class Credenciales {
                 ", password='" + password + '\'' +
                 '}';
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, password, persona, usuario);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Credenciales other = (Credenciales) obj;
+		return id == other.id && Objects.equals(password, other.password) && Objects.equals(persona, other.persona)
+				&& Objects.equals(usuario, other.usuario);
+	}
+    
+    
 }

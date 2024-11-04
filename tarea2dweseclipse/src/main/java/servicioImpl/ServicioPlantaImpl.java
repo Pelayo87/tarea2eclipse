@@ -1,13 +1,21 @@
 package servicioImpl;
 
 import java.util.Set;
-
 import com.dwes.daoImpl.PlantaDAOImpl;
 import com.dwes.modelo.Planta;
 import com.dwes.servicios.ServicioPlanta;
+import com.dwes.util.MySqlDAOFactory;
 
 public class ServicioPlantaImpl implements ServicioPlanta{
 	private PlantaDAOImpl pdi;
+	private MySqlDAOFactory factory;
+	
+
+	public ServicioPlantaImpl() {
+		factory=MySqlDAOFactory.getConexion();
+		pdi=(PlantaDAOImpl)factory.getPlantaDAO();
+	}
+
 
 	@Override
 	public int insertar(Planta planta) {
@@ -26,20 +34,17 @@ public class ServicioPlantaImpl implements ServicioPlanta{
 
 	@Override
 	public Planta findById(String codigo) {
-		// TODO Auto-generated method stub
-		return null;
+		return pdi.findById(codigo);
 	}
 
 	@Override
 	public Planta findByNombre(String nombrecomun) {
-		// TODO Auto-generated method stub
-		return null;
+		return pdi.findByNombre(nombrecomun);
 	}
 
 	@Override
 	public Set<Planta> find() {
-		// TODO Auto-generated method stub
-		return null;
+		return pdi.find();
 	}
 
 }

@@ -1,12 +1,19 @@
 package com.dwes.dao;
 
+import java.util.Set;
 import com.dwes.modelo.Mensaje;
 
 public interface MensajeDAO {
-    public int insertar(Mensaje mensaje);
-	
-	public int modificar(Mensaje mensaje);
-	
-	public int eliminar(Mensaje mensaje);
-
+    int insertar(Mensaje mensaje);
+    
+    int modificar(Mensaje mensaje);
+    
+    int eliminar(Mensaje mensaje);
+    
+    Mensaje findById(Long id);
+    
+    Set<Mensaje> findByEjemplarId(Long ejemplarId);
+    
+    Set<Mensaje> findAll();
 }
+

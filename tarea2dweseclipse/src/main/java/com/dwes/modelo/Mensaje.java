@@ -6,8 +6,27 @@ public class Mensaje {
     private Long id;
     private Date fechahora;
     private String mensaje;
+    
+    // Relación con Ejemplar (M a 1)
+    private Ejemplar ejemplar;
+    
+    private Persona persona;
 
-    public Long getId() {
+    public Mensaje() {
+		super();
+	}	
+    
+	public Mensaje(Long id, Date fechahora, String mensaje, Ejemplar ejemplar, Persona persona) {
+		super();
+		this.id = id;
+		this.fechahora = fechahora;
+		this.mensaje = mensaje;
+		this.ejemplar = ejemplar;
+		this.persona = persona;
+	}
+
+
+	public Long getId() {
         return id;
     }
 
@@ -31,6 +50,16 @@ public class Mensaje {
         this.mensaje = mensaje;
     }
 
+    public Ejemplar getEjemplar() {
+        return ejemplar;
+    }
+
+    public void setEjemplar(Ejemplar ejemplar) {
+        this.ejemplar = ejemplar;
+    }
+    
+    
+
     @Override
     public String toString() {
         return "Mensaje{" +
@@ -39,4 +68,13 @@ public class Mensaje {
                 ", mensaje='" + mensaje + '\'' +
                 '}';
     }
+
+	public Persona getPersona() {
+		return persona;
+	}
+
+	public void setPersona(Persona persona) {
+		this.persona = persona;
+	}
 }
+

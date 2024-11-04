@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 import com.dwes.dao.PlantaDAO;
+import com.dwes.modelo.Ejemplar;
 import com.dwes.modelo.Planta;
 
 public class PlantaDAOImpl implements PlantaDAO{
@@ -31,6 +32,12 @@ public class PlantaDAOImpl implements PlantaDAO{
             System.out.println("Planta insertada correctamente.");
         } catch (SQLException e) {
             System.out.println("Error al insertar la planta: " + e.getMessage());
+        }finally {
+        	try {
+                con.close();
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión: " + e.getMessage());
+            }
         }
         return 0;
     }
@@ -46,6 +53,12 @@ public class PlantaDAOImpl implements PlantaDAO{
 	            System.out.println("Planta modificada correctamente.");
 	        } catch (SQLException e) {
 	            e.printStackTrace();
+	        }finally {
+	        	try {
+	                con.close();
+	            } catch (SQLException e) {
+	                System.out.println("Error al cerrar la conexión: " + e.getMessage());
+	            }
 	        }
 	        return 0;
 	}
@@ -59,7 +72,13 @@ public class PlantaDAOImpl implements PlantaDAO{
 	        System.out.println("Planta eliminada correctamente.");
 	    } catch (SQLException e) {
 	        System.out.println("Error al eliminar la planta: " + e.getMessage());
-	    }
+	    }finally {
+        	try {
+                con.close();
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión: " + e.getMessage());
+            }
+        }
 	    return 0;
 	}
 
@@ -77,7 +96,13 @@ public class PlantaDAOImpl implements PlantaDAO{
 	        }
 	    } catch (SQLException e) {
 	        System.out.println("Error al buscar la planta: " + e.getMessage());
-	    }
+	    }finally {
+        	try {
+                con.close();
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión: " + e.getMessage());
+            }
+        }
 	    return planta;
 	}
 
@@ -102,7 +127,31 @@ public class PlantaDAOImpl implements PlantaDAO{
 	        }
 	    } catch (SQLException e) {
 	        System.out.println("Error al obtener las plantas: " + e.getMessage());
-	    }
+	    }finally {
+        	try {
+                con.close();
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión: " + e.getMessage());
+            }
+        }
 	    return plantas;
+	}
+
+	@Override
+	public Planta findByNombreCientifico(String nombrecientifico) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Set<Ejemplar> findEjemplaresByPlanta(String codigo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int contarEjemplares(String codigo) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

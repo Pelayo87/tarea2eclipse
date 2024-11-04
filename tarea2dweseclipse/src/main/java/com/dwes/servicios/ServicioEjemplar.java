@@ -1,5 +1,7 @@
 package com.dwes.servicios;
 
+import java.util.Set;
+
 import com.dwes.modelo.Ejemplar;
 
 public interface ServicioEjemplar {
@@ -11,5 +13,13 @@ public interface ServicioEjemplar {
     int eliminar(Ejemplar ejemplar);
     
     Ejemplar findById(Long id);
+    
+    Set<Ejemplar> findAll();
+    
+    Ejemplar findWithPlanta(Long id);
+    
+    Ejemplar findWithPersonas(Long id);
+    
+    Ejemplar findWithMensajes(Long id);
 
 }

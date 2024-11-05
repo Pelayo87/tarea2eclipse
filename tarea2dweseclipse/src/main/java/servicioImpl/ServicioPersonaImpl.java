@@ -75,15 +75,4 @@ public class ServicioPersonaImpl implements ServicioPersona{
 	public Set<Persona> findAll() {
 		return pedi.findAll();
 	}
-
-	@Override
-	public Persona findWithCredenciales(Long id) {
-		return pedi.findWithCredenciales(id);
-	}
-
-	@Override
-	public Persona findWithEjemplares(Long id) {
-		return pedi.findWithEjemplares(id);
-	}
-
 }

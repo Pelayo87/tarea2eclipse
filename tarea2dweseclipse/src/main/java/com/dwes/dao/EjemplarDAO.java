@@ -1,5 +1,6 @@
 package com.dwes.dao;
 
+import java.util.List;
 import java.util.Set;
 import com.dwes.modelo.Ejemplar;
 
@@ -14,7 +15,7 @@ public interface EjemplarDAO {
     
     Set<Ejemplar> findAll();
     
-    Ejemplar findWithPlanta(Long id);
+    List<Ejemplar> findByPlanta(List<String> tiposPlanta);
     
     Ejemplar findWithPersonas(Long id);
     

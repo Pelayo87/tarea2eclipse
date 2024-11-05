@@ -129,16 +129,4 @@ public class PersonaDAOImpl implements PersonaDAO{
         }
         return personas;
     }
-
-	@Override
-	public Persona findWithCredenciales(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Persona findWithEjemplares(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

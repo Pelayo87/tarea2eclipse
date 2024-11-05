@@ -1,5 +1,6 @@
 package servicioImpl;
 
+import java.util.List;
 import java.util.Set;
 
 import com.dwes.daoImpl.EjemplarDAOImpl;
@@ -39,26 +40,22 @@ public class ServicioEjemplarImpl implements ServicioEjemplar{
 
 	@Override
 	public Set<Ejemplar> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return edi.findAll();
 	}
 
 	@Override
-	public Ejemplar findWithPlanta(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public List<Ejemplar> findByPlanta(List<String> tiposPlanta) {
+        return edi.findByPlanta(tiposPlanta);
+    }
 
 	@Override
 	public Ejemplar findWithPersonas(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return edi.findWithPersonas(id);
 	}
 
 	@Override
 	public Ejemplar findWithMensajes(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return edi.findWithMensajes(id);
 	}
 
 }

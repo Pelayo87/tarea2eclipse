@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.dwes.dao.EjemplarDAO;
@@ -27,7 +29,7 @@ public class EjemplarDAOImpl implements EjemplarDAO {
             ps = con.prepareStatement("INSERT INTO ejemplar(id, nombre, codigo_planta) VALUES (?, ?, ?)");
             ps.setLong(1, ejemplar.getId());
             ps.setString(2, ejemplar.getNombre());
-            ps.setString(3, ejemplar.getPlanta().getCodigo());
+            ps.setString(3, ejemplar.getCodigo());
             
             resultado = ps.executeUpdate();
             System.out.println("Ejemplar insertado correctamente.");
@@ -96,10 +98,10 @@ public class EjemplarDAOImpl implements EjemplarDAO {
             rs = ps.executeQuery();
             
             while (rs.next()) {
-                Ejemplar ejemplar = new Ejemplar();
-                ejemplar.setId(rs.getLong("id"));
-                ejemplar.setNombre(rs.getString("nombre"));
-                // También se podría cargar la planta si es necesario
+            	long id = rs.getLong("id");
+	            String nombre = rs.getString("nombre");
+	            String codigo_planta = rs.getString("codigo_planta");
+                Ejemplar ejemplar = new Ejemplar(id,nombre,codigo_planta);
                 ejemplares.add(ejemplar);
             }
         } catch (SQLException e) {
@@ -107,17 +109,28 @@ public class EjemplarDAOImpl implements EjemplarDAO {
         }
         return ejemplares;
     }
-
+    
     @Override
-    public Ejemplar findWithPlanta(Long id) {
-        Ejemplar ejemplar = null;
+    public List<Ejemplar> findByPlanta(List<String> tiposPlanta) {
+        List<Ejemplar> ejemplares = new ArrayList<>();
+        
+        if (tiposPlanta.isEmpty()) return ejemplares;
+
+        StringBuilder sql = new StringBuilder("SELECT * FROM ejemplar e JOIN planta p ON e.id = p.codigo WHERE p.nombrecomun IN (");
+        for (int i = 0; i < tiposPlanta.size(); i++) {
+            sql.append("?").append(i < tiposPlanta.size() - 1 ? ", " : "");
+        }
+        sql.append(")");
+
         try {
-            ps = con.prepareStatement("SELECT * FROM ejemplar e JOIN planta p ON e.codigo = p.id WHERE e.id = ?");
-            ps.setLong(1, id);
+            ps = con.prepareStatement(sql.toString());
+            for (int i = 0; i < tiposPlanta.size(); i++) {
+                ps.setString(i + 1, tiposPlanta.get(i));
+            }
             rs = ps.executeQuery();
             
-            if (rs.next()) {
-                ejemplar = new Ejemplar();
+            while (rs.next()) {
+                Ejemplar ejemplar = new Ejemplar();
                 ejemplar.setId(rs.getLong("id"));
                 ejemplar.setNombre(rs.getString("nombre"));
                 
@@ -127,12 +140,14 @@ public class EjemplarDAOImpl implements EjemplarDAO {
                 planta.setNombrecientifico(rs.getString("nombrecientifico"));
                 
                 ejemplar.setPlanta(planta);
+                ejemplares.add(ejemplar);
             }
         } catch (SQLException e) {
-            System.out.println("Error al buscar el ejemplar con su planta: " + e.getMessage());
+            System.out.println("Error al buscar ejemplares: " + e.getMessage());
         }
-        return ejemplar;
+        return ejemplares;
     }
+
 
 	@Override
 	public Ejemplar findWithPersonas(Long id) {

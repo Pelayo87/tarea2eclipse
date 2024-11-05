@@ -31,8 +31,8 @@ public class MensajeDAOImpl implements MensajeDAO {
             ps.setLong(1, mensaje.getId());
             ps.setTimestamp(2, new Timestamp(mensaje.getFechahora().getTime()));
             ps.setString(3, mensaje.getMensaje());
-            ps.setLong(4, mensaje.getEjemplar().getId());
-            ps.setLong(5, mensaje.getPersona().getId());
+            ps.setLong(4, mensaje.getId_ejemplar());
+            ps.setLong(5, mensaje.getId_persona());
             resultado = ps.executeUpdate();
             System.out.println("Mensaje insertado correctamente.");
         } catch (SQLException e) {

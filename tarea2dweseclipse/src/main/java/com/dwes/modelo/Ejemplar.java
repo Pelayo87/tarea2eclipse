@@ -4,8 +4,9 @@ import java.util.Objects;
 import java.util.Set;
 
 public class Ejemplar {
-    private Long id;
+    private long id;
     private String nombre;
+    private String codigo;
     
     // Relación con Planta (1 a N)
     private Planta planta;
@@ -18,6 +19,13 @@ public class Ejemplar {
 
     public Ejemplar() {
 		super();
+	}
+    
+	public Ejemplar(long id, String nombre, String codigo) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+		this.codigo = codigo;
 	}
 
 	public Ejemplar(Long id, String nombre, Planta planta, Set<Persona> personas, Set<Mensaje> mensajes) {
@@ -68,6 +76,8 @@ public class Ejemplar {
     public void setMensajes(Set<Mensaje> mensajes) {
         this.mensajes = mensajes;
     }
+    
+    
 
     @Override
     public String toString() {
@@ -94,6 +104,16 @@ public class Ejemplar {
 		return Objects.equals(id, other.id) && Objects.equals(mensajes, other.mensajes)
 				&& Objects.equals(nombre, other.nombre) && Objects.equals(personas, other.personas)
 				&& Objects.equals(planta, other.planta);
+	}
+
+
+	public String getCodigo() {
+		return codigo;
+	}
+
+
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
 	}
     
     

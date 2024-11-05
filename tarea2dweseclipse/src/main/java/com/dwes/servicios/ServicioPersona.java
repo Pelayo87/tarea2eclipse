@@ -17,9 +17,4 @@ public interface ServicioPersona {
     Persona findByNombre(String nombre);
     
     Set<Persona> findAll();
-    
-    Persona findWithCredenciales(Long id);
-    
-    Persona findWithEjemplares(Long id);
-
 }

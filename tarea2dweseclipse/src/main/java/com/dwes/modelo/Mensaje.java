@@ -4,9 +4,11 @@ import java.util.Date;
 import java.util.Objects;
 
 public class Mensaje {
-    private Long id;
+    private long id;
     private Date fechahora;
     private String mensaje;
+    private long id_ejemplar;
+    private long id_persona;
     
     // Relación con Ejemplar (M a 1)
     private Ejemplar ejemplar;
@@ -66,6 +68,23 @@ public class Mensaje {
 	public void setPersona(Persona persona) {
 		this.persona = persona;
 	}
+	
+	public long getId_ejemplar() {
+		return id_ejemplar;
+	}
+
+	public void setId_ejemplar(long id_ejemplar) {
+		this.id_ejemplar = id_ejemplar;
+	}
+
+	public long getId_persona() {
+		return id_persona;
+	}
+
+	public void setId_persona(long id_persona) {
+		this.id_persona = id_persona;
+	}
+	
     
     @Override
     public String toString() {
@@ -94,6 +113,6 @@ public class Mensaje {
 				&& Objects.equals(id, other.id) && Objects.equals(mensaje, other.mensaje)
 				&& Objects.equals(persona, other.persona);
 	}
-	
+
 }
 

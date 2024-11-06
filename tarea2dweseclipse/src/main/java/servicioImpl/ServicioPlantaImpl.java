@@ -24,19 +24,29 @@ public class ServicioPlantaImpl implements ServicioPlanta{
 
 	@Override
 	public int insertar(Planta planta) {
-	    // Validación del código
-	    String codigo;
-	    do {
-	        codigo = planta.getCodigo();
-	        if (codigo == null || codigo.trim().isEmpty()) {
-	            codigo = sc.nextLine().trim().toUpperCase();
-	            planta.setCodigo(codigo);
-	        } else if (pdi.ExisteCodigo(codigo)) {
-	            System.err.println("El código '" + codigo + "' ya está en uso. Por favor, ingrese un código diferente:");
-	            codigo = sc.nextLine().trim().toUpperCase();
-	            planta.setCodigo(codigo);
-	        }
-	    } while (codigo == null || codigo.trim().isEmpty() || pdi.ExisteCodigo(codigo));
+		// Validación del código
+		String codigo;
+		do {
+		    codigo = planta.getCodigo();
+		    
+		    if (codigo == null || codigo.trim().isEmpty()) {
+		        System.out.println("Ingrese el código de la planta (solo letras):");
+		        codigo = sc.nextLine().trim().toUpperCase();
+		        
+		        // Valido que el código solo contenga letras
+		        if (!codigo.matches("[a-zA-Z]+")) {
+		            System.err.println("El código solo puede contener letras. Inténtelo de nuevo.");
+		            codigo = "";
+		        } else {
+		            planta.setCodigo(codigo);
+		        }
+		    } else if (pdi.ExisteCodigo(codigo)) {
+		        System.err.println("El código '" + codigo + "' ya está en uso. Por favor, ingrese un código diferente:");
+		        codigo = sc.nextLine().trim().toUpperCase();
+		        planta.setCodigo(codigo);
+		    }
+		} while (codigo == null || codigo.trim().isEmpty() || pdi.ExisteCodigo(codigo) || !codigo.matches("[a-zA-Z]+"));
+
 
 	    // Validación del nombre común
 	    String nombreComun;

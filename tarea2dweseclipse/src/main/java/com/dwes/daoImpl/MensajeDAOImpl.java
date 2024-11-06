@@ -13,6 +13,10 @@ import com.dwes.modelo.Ejemplar;
 import com.dwes.modelo.Mensaje;
 import com.dwes.modelo.Persona;
 
+/**
+ * Implementación de la interfaz MensajeDAO para la gestión de objetos Mensaje en la base de datos.
+ */
+
 public class MensajeDAOImpl implements MensajeDAO {
 
     private Connection con;
@@ -22,6 +26,12 @@ public class MensajeDAOImpl implements MensajeDAO {
     public MensajeDAOImpl(Connection con) {
         this.con = con;
     }
+    
+    /**
+     * Inserta, modifica o elimina un nuevo mensaje en la base de datos.
+     * @param mensaje objeto Mensaje a insertar, modificar o eliminar
+     * @return el número de filas afectadas
+     */
 
     @Override
     public int insertar(Mensaje mensaje) {
@@ -100,6 +110,12 @@ public class MensajeDAOImpl implements MensajeDAO {
         }
         return mensaje;
     }
+    
+    /**
+     * Busca los mensajes en la base de datos relacionados con un ejemplar por su ID.
+     * @param ejemplarId el ID del ejemplar
+     * @return un conjunto de objetos Mensaje relacionados con el ejemplar
+     */
 
     @Override
     public Set<Mensaje> findByEjemplarId(Long ejemplarId) {
@@ -127,6 +143,11 @@ public class MensajeDAOImpl implements MensajeDAO {
         }
         return mensajes;
     }
+    
+    /**
+     * Obtiene todos los mensajes almacenados en la base de datos.
+     * @return un conjunto de objetos Mensaje
+     */
 
     @Override
     public Set<Mensaje> findAll() {

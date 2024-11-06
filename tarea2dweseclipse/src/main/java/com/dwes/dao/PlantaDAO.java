@@ -15,12 +15,6 @@ public interface PlantaDAO {
     
     Planta findByNombre(String nombrecomun);
     
-    Planta findByNombreCientifico(String nombrecientifico);
-    
-    Set<Ejemplar> findEjemplaresByPlanta(String codigo);
-    
-    int contarEjemplares(String codigo);
-    
     Set<Planta> find();
     
     boolean ExisteCodigo(String codigo);

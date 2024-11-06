@@ -10,6 +10,11 @@ import java.util.Set;
 import com.dwes.dao.CredencialesDAO;
 import com.dwes.modelo.Credenciales;
 
+/**
+ * Implementación de la interfaz {@link CredencialesDAO}.
+ * Esta clase gestiona las operaciones CRUD para la entidad {@link Credenciales} en la base de datos.
+ */
+
 public class CredencialesDAOImpl implements CredencialesDAO{
 	private Connection con;
     PreparedStatement ps;
@@ -18,6 +23,12 @@ public class CredencialesDAOImpl implements CredencialesDAO{
     public CredencialesDAOImpl(Connection con) {
         this.con = con;
     }
+    
+    /**
+     * Inserta, modifica o elimina las credenciales en la base de datos.
+     * @param credenciales el objeto {@link Credenciales} a insertar, modificar o eliminar
+     * @return el número de filas afectadas por la operación
+     */
 
     @Override
     public int insertar(Credenciales credenciales) {
@@ -87,6 +98,12 @@ public class CredencialesDAOImpl implements CredencialesDAO{
         }
         return credenciales;
     }
+    
+    /**
+     * Busca las credenciales por el ID de la persona asociada.
+     * @param personaId el ID de la persona a la que pertenecen las credenciales
+     * @return el objeto {@link Credenciales} encontrado o null si no existe
+     */
 
     @Override
     public Credenciales findByPersonaId(Long personaId) {
@@ -107,6 +124,12 @@ public class CredencialesDAOImpl implements CredencialesDAO{
         }
         return credenciales;
     }
+    
+    /**
+     * Busca las credenciales por nombre de usuario.
+     * @param usuario el nombre de usuario de las credenciales a buscar
+     * @return el objeto {@link Credenciales} encontrado o null si no existe
+     */
 
     @Override
     public Credenciales findByUsuario(String usuario) {
@@ -127,6 +150,11 @@ public class CredencialesDAOImpl implements CredencialesDAO{
         }
         return credenciales;
     }
+    
+    /**
+     * Devuelve un conjunto de todas las credenciales.
+     * @return un conjunto {@link Set} de objetos {@link Credenciales}
+     */
 
 	public Set<Credenciales> find() {
 	    Set<Credenciales> credenciales = new HashSet<>();

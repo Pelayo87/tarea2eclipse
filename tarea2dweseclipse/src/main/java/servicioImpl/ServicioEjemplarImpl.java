@@ -47,15 +47,4 @@ public class ServicioEjemplarImpl implements ServicioEjemplar{
     public List<Ejemplar> findByPlanta(List<String> tiposPlanta) {
         return edi.findByPlanta(tiposPlanta);
     }
-
-	@Override
-	public Ejemplar findWithPersonas(Long id) {
-		return edi.findWithPersonas(id);
-	}
-
-	@Override
-	public Ejemplar findWithMensajes(Long id) {
-		return edi.findWithMensajes(id);
-	}
-
 }

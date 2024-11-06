@@ -10,6 +10,10 @@ import java.util.Set;
 import com.dwes.dao.PersonaDAO;
 import com.dwes.modelo.Persona;
 
+/**
+ * Implementación de la interfaz PersonaDAO para la gestión de objetos Persona en la base de datos.
+ */
+
 public class PersonaDAOImpl implements PersonaDAO{
 	
 	private Connection con;
@@ -20,6 +24,12 @@ public class PersonaDAOImpl implements PersonaDAO{
     public PersonaDAOImpl(Connection con) {
         this.con = con;
     }
+    
+    /**
+     * Inserta, modifica o elimina una nueva persona en la base de datos.
+     * @param persona objeto Persona a insertar, modificar o eliminar
+     * @return 1 si la inserción, modificación o eliminación es exitosa, 0 si falla
+     */
 
     @Override
     public int insertar(Persona persona) {
@@ -109,6 +119,11 @@ public class PersonaDAOImpl implements PersonaDAO{
         }
         return persona;
     }
+    
+    /**
+     * Obtiene todas las personas almacenadas en la base de datos.
+     * @return un conjunto de objetos Persona
+     */
 
 	@Override
     public Set<Persona> findAll() {

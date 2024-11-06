@@ -16,10 +16,6 @@ public interface EjemplarDAO {
     Set<Ejemplar> findAll();
     
     List<Ejemplar> findByPlanta(List<String> tiposPlanta);
-    
-    Ejemplar findWithPersonas(Long id);
-    
-    Ejemplar findWithMensajes(Long id);
 }
 
 

@@ -13,6 +13,10 @@ import com.dwes.dao.EjemplarDAO;
 import com.dwes.modelo.Ejemplar;
 import com.dwes.modelo.Planta;
 
+/**
+ * Implementación de la interfaz EjemplarDAO para la gestión de objetos Ejemplar en la base de datos.
+ */
+
 public class EjemplarDAOImpl implements EjemplarDAO {
     private Connection con;
     private PreparedStatement ps;
@@ -21,6 +25,12 @@ public class EjemplarDAOImpl implements EjemplarDAO {
     public EjemplarDAOImpl(Connection con) {
         this.con = con;
     }
+    
+    /**
+     * Inserta, modifica o elimina un nuevo ejemplar en la base de datos.
+     * @param ejemplar objeto Ejemplar a insertar, modificar o eliminar
+     * @return el número de filas afectadas
+     */
 
     @Override
     public int insertar(Ejemplar ejemplar) {
@@ -45,7 +55,7 @@ public class EjemplarDAOImpl implements EjemplarDAO {
         try {
             ps = con.prepareStatement("UPDATE ejemplar SET nombre = ?, codigo_planta = ? WHERE id = ?");
             ps.setString(1, ejemplar.getNombre());
-            ps.setString(2, ejemplar.getPlanta().getCodigo());
+            ps.setString(2, ejemplar.getCodigo());
             ps.setLong(3, ejemplar.getId());
             
             resultado = ps.executeUpdate();
@@ -70,6 +80,12 @@ public class EjemplarDAOImpl implements EjemplarDAO {
         }
         return resultado;
     }
+    
+    /**
+     * Busca un ejemplar en la base de datos por su ID.
+     * @param id el ID del ejemplar
+     * @return el objeto Ejemplar encontrado o null si no se encuentra
+     */
 
     @Override
     public Ejemplar findById(Long id) {
@@ -89,6 +105,11 @@ public class EjemplarDAOImpl implements EjemplarDAO {
         }
         return ejemplar;
     }
+    
+    /**
+     * Obtiene todos los ejemplares almacenados en la base de datos.
+     * @return un conjunto de objetos Ejemplar
+     */
 
     @Override
     public Set<Ejemplar> findAll() {
@@ -109,6 +130,11 @@ public class EjemplarDAOImpl implements EjemplarDAO {
         }
         return ejemplares;
     }
+    
+    /**
+     * Obtiene todos los ejemplares almacenados en la base de datos.
+     * @return un conjunto de objetos Ejemplar
+     */
     
     @Override
     public List<Ejemplar> findByPlanta(List<String> tiposPlanta) {
@@ -147,17 +173,4 @@ public class EjemplarDAOImpl implements EjemplarDAO {
         }
         return ejemplares;
     }
-
-
-	@Override
-	public Ejemplar findWithPersonas(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Ejemplar findWithMensajes(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

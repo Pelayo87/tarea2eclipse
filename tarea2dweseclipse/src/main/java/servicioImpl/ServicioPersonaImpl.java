@@ -25,29 +25,41 @@ public class ServicioPersonaImpl implements ServicioPersona{
 	}
 
 	@Override
-	public int insertar(Persona persona) {  
-		
-	    // Validar nombre
+	public int insertar(Persona persona) {
 	    String nombre;
 	    do {
-	    	nombre=persona.getNombre();
+	        System.out.println("Introduce tu nombre real:");
+	        nombre = sc.nextLine().trim();
+	        
 	        if (nombre.isEmpty()) {
-	            System.err.println("El nombre no puede ser nulo o vacío. Inténtelo de nuevo.");
+	            System.err.println("El nombre no puede estar vacío. Inténtelo de nuevo.");
+	        } else if (!nombre.matches("[a-zA-Z]+")) {
+	            System.err.println("El nombre solo debe contener letras. Inténtelo de nuevo.");
+	            nombre = "";
+	        } else {
 	            persona.setNombre(nombre);
 	        }
-	    } while (nombre.isEmpty());
+	        
+	    } while (nombre.isEmpty() || !nombre.matches("[a-zA-Z]+"));
 	    
 	    // Validar email
 	    String email;
 	    do {
-	        System.err.println("Ingrese el email de la persona:");
+	        System.out.println("Introduce tu email (correo electrónico):");
 	        email = sc.nextLine().trim();
-	        if (email.isEmpty() || !EMAIL_PATTERN.matcher(email).matches()) {
+	        
+	        if (email.isEmpty()) {
+	            System.err.println("El email no puede estar vacío. Inténtelo de nuevo.");
+	        } else if (!EMAIL_PATTERN.matcher(email).matches()) {
 	            System.err.println("El email es inválido. Debe tener un formato correcto. Inténtelo de nuevo.");
+	            email = "";
+	        } else {
 	            persona.setEmail(email);
 	        }
+	        
 	    } while (email.isEmpty() || !EMAIL_PATTERN.matcher(email).matches());
-	   
+	    
+	    // Llamada a la capa DAO
 	    return pedi.insertar(persona);
 	}
 

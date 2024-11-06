@@ -10,16 +10,25 @@ import com.dwes.dao.PlantaDAO;
 import com.dwes.modelo.Ejemplar;
 import com.dwes.modelo.Planta;
 
+/**
+ * Implementación de la interfaz PlantaDAO para la gestión de objetos Planta en la base de datos.
+ */
+
 public class PlantaDAOImpl implements PlantaDAO{
 	
 	private Connection con;
     PreparedStatement ps;
     private ResultSet rs;
 
-    // Constructor que recibe la conexión
     public PlantaDAOImpl(Connection con) {
         this.con = con;
     }
+    
+    /**
+     * Insertar , modificar o eliminar una nueva planta en la base de datos.
+     * @param planta objeto Planta a insertar, modificar o eliminar
+     * @return 0 si la inserción, modificación o eliminación falla, 1 si tiene éxito
+     */
 
     @Override
     public int insertar(Planta planta) {
@@ -107,6 +116,12 @@ public class PlantaDAOImpl implements PlantaDAO{
 	    return plantas;
 	}
 	
+	/**
+     * Verifica si existe una planta con el código especificado.
+     * @param codigo el código a verificar
+     * @return true si existe, false si no existe
+     */
+	
 	@Override
 	public boolean ExisteCodigo(String codigo) {
 	    boolean exists = false;
@@ -121,24 +136,5 @@ public class PlantaDAOImpl implements PlantaDAO{
 	        System.out.println("Error al verificar la existencia del código: " + e.getMessage());
 	    }
 	    return exists;
-	}
-
-
-	@Override
-	public Planta findByNombreCientifico(String nombrecientifico) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Set<Ejemplar> findEjemplaresByPlanta(String codigo) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int contarEjemplares(String codigo) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 }

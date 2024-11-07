@@ -13,9 +13,10 @@ public interface EjemplarDAO {
     
     Ejemplar findById(Long id);
     
+    List<Ejemplar> findByPlanta(String codigo);
+    
     Set<Ejemplar> findAll();
     
-    List<Ejemplar> findByPlanta(List<String> tiposPlanta);
 }
 
 

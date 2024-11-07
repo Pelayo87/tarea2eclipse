@@ -1,5 +1,6 @@
 package servicioImpl;
 
+import java.sql.Date;
 import java.util.Set;
 
 import com.dwes.daoImpl.MensajeDAOImpl;
@@ -36,6 +37,11 @@ public class ServicioMensajeImpl implements ServicioMensaje{
 	public Mensaje findById(Long id) {
 		return mdi.findById(id);
 	}
+	
+	@Override
+	public Mensaje findByFecha(Date fechahora) {
+		return mdi.findByFecha(fechahora);
+	}
 
 	@Override
 	public Set<Mensaje> findByEjemplarId(Long ejemplarId) {
@@ -46,5 +52,12 @@ public class ServicioMensajeImpl implements ServicioMensaje{
 	public Set<Mensaje> findAll() {
 		return mdi.findAll();
 	}
+
+	@Override
+	public Set<Mensaje> findByPersonaId(Long personaId) {
+		return mdi.findByPersonaId(personaId);
+	}
+
+	
 
 }

@@ -60,6 +60,15 @@ public class Ejemplar {
     public void setPlanta(Planta planta) {
         this.planta = planta;
     }
+    
+    public String getCodigo() {
+		return codigo;
+	}
+
+
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
+	}
 
     public Set<Persona> getPersonas() {
         return personas;
@@ -77,15 +86,12 @@ public class Ejemplar {
         this.mensajes = mensajes;
     }
     
-    
-
     @Override
-    public String toString() {
-        return "Ejemplar{" +
-                "id=" + id +
-                ", nombre='" + nombre + '\'' +
-                '}';
-    }
+	public String toString() {
+		return "Ejemplar [id=" + id + ", nombre=" + nombre + ", codigo=" + codigo + "]";
+	}
+    
+    
 
 	@Override
 	public int hashCode() {
@@ -104,17 +110,5 @@ public class Ejemplar {
 		return Objects.equals(id, other.id) && Objects.equals(mensajes, other.mensajes)
 				&& Objects.equals(nombre, other.nombre) && Objects.equals(personas, other.personas)
 				&& Objects.equals(planta, other.planta);
-	}
-
-
-	public String getCodigo() {
-		return codigo;
-	}
-
-
-	public void setCodigo(String codigo) {
-		this.codigo = codigo;
-	}
-    
-    
+	} 
 }

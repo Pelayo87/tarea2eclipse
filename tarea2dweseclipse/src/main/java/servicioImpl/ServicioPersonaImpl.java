@@ -26,6 +26,7 @@ public class ServicioPersonaImpl implements ServicioPersona{
 
 	@Override
 	public int insertar(Persona persona) {
+		// Validación nombre real
 	    String nombre;
 	    do {
 	        System.out.println("Introduce tu nombre real:");
@@ -42,7 +43,7 @@ public class ServicioPersonaImpl implements ServicioPersona{
 	        
 	    } while (nombre.isEmpty() || !nombre.matches("[a-zA-Z]+"));
 	    
-	    // Validar email
+	    // Validación email
 	    String email;
 	    do {
 	        System.out.println("Introduce tu email (correo electrónico):");

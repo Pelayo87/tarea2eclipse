@@ -1,6 +1,7 @@
 package com.dwes.daoImpl;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -111,6 +112,12 @@ public class MensajeDAOImpl implements MensajeDAO {
         return mensaje;
     }
     
+    @Override
+	public Mensaje findByFecha(Date fechahora) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+    
     /**
      * Busca los mensajes en la base de datos relacionados con un ejemplar por su ID.
      * @param ejemplarId el ID del ejemplar
@@ -174,6 +181,33 @@ public class MensajeDAOImpl implements MensajeDAO {
         }
         return mensajes;
     }
+
+	@Override
+	public Set<Mensaje> findByPersonaId(Long personaId) {
+		Set<Mensaje> mensajes = new HashSet<>();
+        try {
+            ps = con.prepareStatement("SELECT * FROM mensaje WHERE id_persona = ?");
+            ps.setLong(1, personaId);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Mensaje mensaje = new Mensaje();
+                mensaje.setId(rs.getLong("id"));
+                mensaje.setFechahora(rs.getTimestamp("fechahora"));
+                mensaje.setMensaje(rs.getString("mensaje"));
+                Ejemplar ejemplar = new Ejemplar();
+                ejemplar.setId(rs.getLong("id_ejemplar"));
+                mensaje.setEjemplar(ejemplar);
+                Persona persona = new Persona();
+                persona.setId(rs.getLong("id_persona"));
+                mensaje.setPersona(persona);
+                mensajes.add(mensaje);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al buscar mensajes por ejemplar ID: " + e.getMessage());
+        }
+        return mensajes;
+	}
 }
 
 

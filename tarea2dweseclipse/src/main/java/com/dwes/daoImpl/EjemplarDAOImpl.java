@@ -107,6 +107,34 @@ public class EjemplarDAOImpl implements EjemplarDAO {
     }
     
     /**
+     * Obtiene todos los ejemplares almacenados en la base de datos de ese tipo de planta.
+     * @return un conjunto de objetos Ejemplar
+     */
+    
+    @Override
+    public List<Ejemplar> findByPlanta(String codigo) {
+        List<Ejemplar> ejemplares = new ArrayList<>();
+        
+        try {
+            ps = con.prepareStatement("SELECT * FROM ejemplar WHERE codigo_planta = ?");
+            ps.setString(1, codigo);
+            rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                Ejemplar ejemplar = new Ejemplar();
+                ejemplar.setId(rs.getLong("id"));
+                ejemplar.setNombre(rs.getString("nombre"));
+                ejemplar.setCodigo(rs.getString("codigo_planta"));
+                ejemplares.add(ejemplar);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al buscar los ejemplares: " + e.getMessage());
+        }       
+        return ejemplares;
+    }
+
+    
+    /**
      * Obtiene todos los ejemplares almacenados en la base de datos.
      * @return un conjunto de objetos Ejemplar
      */
@@ -129,48 +157,5 @@ public class EjemplarDAOImpl implements EjemplarDAO {
             System.out.println("Error al buscar todos los ejemplares: " + e.getMessage());
         }
         return ejemplares;
-    }
-    
-    /**
-     * Obtiene todos los ejemplares almacenados en la base de datos.
-     * @return un conjunto de objetos Ejemplar
-     */
-    
-    @Override
-    public List<Ejemplar> findByPlanta(List<String> tiposPlanta) {
-        List<Ejemplar> ejemplares = new ArrayList<>();
-        
-        if (tiposPlanta.isEmpty()) return ejemplares;
-
-        StringBuilder sql = new StringBuilder("SELECT * FROM ejemplar e JOIN planta p ON e.id = p.codigo WHERE p.nombrecomun IN (");
-        for (int i = 0; i < tiposPlanta.size(); i++) {
-            sql.append("?").append(i < tiposPlanta.size() - 1 ? ", " : "");
-        }
-        sql.append(")");
-
-        try {
-            ps = con.prepareStatement(sql.toString());
-            for (int i = 0; i < tiposPlanta.size(); i++) {
-                ps.setString(i + 1, tiposPlanta.get(i));
-            }
-            rs = ps.executeQuery();
-            
-            while (rs.next()) {
-                Ejemplar ejemplar = new Ejemplar();
-                ejemplar.setId(rs.getLong("id"));
-                ejemplar.setNombre(rs.getString("nombre"));
-                
-                Planta planta = new Planta();
-                planta.setCodigo(rs.getString("codigo"));
-                planta.setNombrecomun(rs.getString("nombrecomun"));
-                planta.setNombrecientifico(rs.getString("nombrecientifico"));
-                
-                ejemplar.setPlanta(planta);
-                ejemplares.add(ejemplar);
-            }
-        } catch (SQLException e) {
-            System.out.println("Error al buscar ejemplares: " + e.getMessage());
-        }
-        return ejemplares;
-    }
+    }    
 }

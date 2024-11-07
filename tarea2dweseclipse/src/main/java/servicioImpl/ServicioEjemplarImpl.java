@@ -2,7 +2,6 @@ package servicioImpl;
 
 import java.util.List;
 import java.util.Set;
-
 import com.dwes.daoImpl.EjemplarDAOImpl;
 import com.dwes.modelo.Ejemplar;
 import com.dwes.servicios.ServicioEjemplar;
@@ -37,14 +36,14 @@ public class ServicioEjemplarImpl implements ServicioEjemplar{
 	public Ejemplar findById(Long id) {
 		return edi.findById(id);
 	}
+	
+	@Override
+	public List<Ejemplar> findByPlanta(String codigo) {
+		return edi.findByPlanta(codigo);
+	}
 
 	@Override
 	public Set<Ejemplar> findAll() {
 		return edi.findAll();
-	}
-
-	@Override
-    public List<Ejemplar> findByPlanta(List<String> tiposPlanta) {
-        return edi.findByPlanta(tiposPlanta);
-    }
+	}		
 }

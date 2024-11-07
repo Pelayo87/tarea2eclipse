@@ -15,7 +15,7 @@ public interface ServicioEjemplar {
     
     Ejemplar findById(Long id);
     
-    Set<Ejemplar> findAll();
+    List<Ejemplar> findByPlanta(String codigo);
     
-    List<Ejemplar> findByPlanta(List<String> tiposPlanta);
+    Set<Ejemplar> findAll();    
 }

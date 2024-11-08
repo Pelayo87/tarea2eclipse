@@ -2,7 +2,6 @@ package fachada;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -13,8 +12,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import com.dwes.modelo.Credenciales;
 import com.dwes.modelo.Ejemplar;
 import com.dwes.modelo.Mensaje;
 import com.dwes.modelo.Persona;
@@ -30,15 +27,15 @@ public class InvernaderoFachadaPersonal {
 	private InvernaderoFachadaPrincipal facade;
 	Scanner sc = new Scanner(System.in);
 	String nombreusuario;
-    Credenciales usuarioActual;
-    
-    InvernaderoServiciosFactory factoryServicios = InvernaderoServiciosFactory.getServicios();
+    Persona usuarioActual;
     
     //FECHA ACTUAL Y FORMATEADA
     Date fechaActual = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
     DateTimeFormatter formatoFechaHora = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
     String fechaFormateada = formatoFecha.format(fechaActual);
+    
+    InvernaderoServiciosFactory factoryServicios = InvernaderoServiciosFactory.getServicios();
 
     ServicioEjemplar S_ejemplar = factoryServicios.getServiciosEjemplar();
     ServicioPlanta S_planta = factoryServicios.getServiciosPlanta();
@@ -168,81 +165,118 @@ public class InvernaderoFachadaPersonal {
 	
 	//MÉTODOS PARA LA GESTIÓN DE EJEMPLARES
 	
-	
-    private void registrarEjemplar() {
-        if (usuarioActual == null) {
-            System.err.println("Error: No se ha iniciado sesión correctamente.");
-            return; // No continuar si usuarioActual es null
-        }
+	private void registrarEjemplar() {
+		Set<Planta> tiposPlantas = S_planta.find();
+		if (tiposPlantas.isEmpty()) {
+			System.out.println("No hay tipos de plantas disponibles en el sistema.");
+			return;
+		}
+		System.out.println("Selecciona el tipo de planta:");
+		int index = 1;
+		for (Planta planta : tiposPlantas) {
+			System.out.println(index + " - " + planta.getNombrecomun());
+			index++;
+		}
+		try {
+			// Obtener la selección del usuario
+			int seleccion = sc.nextInt();
+			if (seleccion < 1 || seleccion > tiposPlantas.size()) {
+				System.out.println("Selección no válida.");
+				return;
+			}
+			// Obtener la planta seleccionada
+			Planta plantaElegida = (Planta) tiposPlantas.toArray()[seleccion - 1];
+			System.out.println("Planta seleccionada: " + plantaElegida.getNombrecomun());
+			String codigoPlanta = plantaElegida.getCodigo();
+			// Crear instancia de Ejemplar
+			Ejemplar nuevoEjemplar = new Ejemplar();
+			nuevoEjemplar.setNombre("");
+			nuevoEjemplar.setCodigo(codigoPlanta);
+			// Guardo el ejemplar en la BD
+			S_ejemplar.insertar(nuevoEjemplar);
 
-        // Insertar ejemplar y obtener el id generado
-        Ejemplar nuevoEjemplar = new Ejemplar();
-        int idEjemplar = S_ejemplar.insertar(nuevoEjemplar);
+			// Recuperar todos los ejemplares para encontrar el último ID
+			Set<Ejemplar> mostrarEjemplares = S_ejemplar.findAll();
+			long idEjemplar = -1;
+			for (Ejemplar ejemplar : mostrarEjemplares) {
+				if (ejemplar.getId() > idEjemplar) {
+					idEjemplar = ejemplar.getId();
+				}
+			}
+			if (idEjemplar <= 0) {
+				System.err.println("Error: No se pudo obtener el ID del ejemplar registrado.");
+				return;
+			}
 
-        if (idEjemplar > 0) {
-            // Modificar el ejemplar en la BD si es necesario
-            S_ejemplar.modificar(nuevoEjemplar);
+			String nombreEjemplar = codigoPlanta + "_" + idEjemplar;
 
-            // Crear el mensaje inicial para el ejemplar registrado
-            Mensaje mensajeInicial = new Mensaje();
-            mensajeInicial.setFechahora(fechaActual);
-            mensajeInicial.setMensaje("Registro realizado por " + nombreusuario + " el " + fechaFormateada);
-            mensajeInicial.setId_ejemplar(idEjemplar);
-            mensajeInicial.setId_persona(usuarioActual.getId());
+			Ejemplar cambioejemplar = new Ejemplar(idEjemplar, nombreEjemplar, codigoPlanta);
+			// Modifico el ejemplar en la BD
+			S_ejemplar.modificar(cambioejemplar);
 
-            // Guardar el mensaje en la BD
-            int resultadoMensaje = S_mensaje.insertar(mensajeInicial);
-
-            if (resultadoMensaje > 0) {
-                System.out.println("Ejemplar y mensaje inicial registrados exitosamente.");
-            } else {
-                System.err.println("Ocurrió un error al registrar el mensaje.");
-            }
-        } else {
-            System.err.println("Error al registrar el ejemplar.");
-        }
-    }
+			// Creo el mensaje inicial para el ejemplar registrado
+			Mensaje mensajeInicial = new Mensaje();
+			mensajeInicial.setFechahora(fechaActual);
+			mensajeInicial.setMensaje("Registro realizado por " + nombreusuario + " el " + fechaFormateada);
+			mensajeInicial.setId_ejemplar(idEjemplar);
+			mensajeInicial.setId_persona(facade.id_Persona);
+			// Guardo el mensaje en la BD
+			int resultadoMensaje = S_mensaje.insertar(mensajeInicial);
+			if (resultadoMensaje > 0) {
+				System.out.println("Ejemplar y mensaje inicial registrados exitosamente.");
+			} else {
+				System.err.println("Ocurrió un error al registrar el mensaje.");
+			}
+		} catch (InputMismatchException e) {
+			System.out.println("Solo se permiten ingresar números, inténtalo de nuevo.");
+			sc.nextLine();
+		}
+	}
 
    
-    private void vermensajesEjemplar() {
-        Set<Ejemplar> ejemplares = S_ejemplar.findAll();
-        if (ejemplares.isEmpty()) {
-            System.out.println("No hay ejemplares de plantas disponibles en el sistema.");
-            return;
-        }
-        
-        System.out.println("Selecciona el ejemplar del que deseas ver los mensajes:");
-        int index = 1;
-        for (Ejemplar e : ejemplares) {
-            System.out.println(index + " - " + e.getNombre());
-            index++;
-        }
-        
-        // Obtener la selección del usuario
-        int seleccion = sc.nextInt();
-        if (seleccion < 1 || seleccion > ejemplares.size()) {
-            System.out.println("Selección no válida.");
-            return;
-        }
+	private void vermensajesEjemplar() {
+		Set<Ejemplar> ejemplares = S_ejemplar.findAll();
+		if (ejemplares.isEmpty()) {
+			System.out.println("No hay ejemplares de plantas disponibles en el sistema.");
+			return;
+		}
 
-        // Obtener el ejemplar seleccionado
-        Ejemplar ejemplarElegido = (Ejemplar) ejemplares.toArray()[seleccion - 1];
-        long idEjemplar = ejemplarElegido.getId();
+		System.out.println("Selecciona el ejemplar del que deseas ver los mensajes:");
+		int index = 1;
+		for (Ejemplar e : ejemplares) {
+			System.out.println(index + " - " + e.getNombre());
+			index++;
+		}
+		try {
+			// Obtener la selección del usuario
+			int seleccion = sc.nextInt();
+			if (seleccion < 1 || seleccion > ejemplares.size()) {
+				System.out.println("Selección no válida.");
+				return;
+			}
 
-        // Obtener los mensajes relacionados con el ejemplar seleccionado
-        Set<Mensaje> mensajes = S_mensaje.findByEjemplarId(idEjemplar);
+			// Obtener el ejemplar seleccionado
+			Ejemplar ejemplarElegido = (Ejemplar) ejemplares.toArray()[seleccion - 1];
+			long idEjemplar = ejemplarElegido.getId();
 
-        if (mensajes.isEmpty()) {
-            System.out.println("No hay mensajes para el ejemplar seleccionado.");
-        } else {
-            System.out.println("Mensajes para el ejemplar " + ejemplarElegido.getNombre() + ":");
-            for (Mensaje mensaje : mensajes) {
-                System.out.println("Fecha y hora: " + mensaje.getFechahora());
-                System.out.println("Mensaje: " + mensaje.getMensaje());
-                System.out.println("-------------------------");
-            }
-        }
-    }
+			// Obtener los mensajes relacionados con el ejemplar seleccionado
+			Set<Mensaje> mensajes = S_mensaje.findByEjemplarId(idEjemplar);
+
+			if (mensajes.isEmpty()) {
+				System.out.println("No hay mensajes para el ejemplar seleccionado.");
+			} else {
+				System.out.println("Mensajes para el ejemplar " + ejemplarElegido.getNombre() + ":");
+				for (Mensaje mensaje : mensajes) {
+					System.out.println("Fecha y hora: " + mensaje.getFechahora());
+					System.out.println("Mensaje: " + mensaje.getMensaje());
+					System.out.println("-------------------------");
+				}
+			}
+		} catch (InputMismatchException e) {
+			System.out.println("Solo se permiten ingresar números, inténtalo de nuevo.");
+			sc.nextLine();
+		}
+	}
     
     private void filtrarEjemplarestodos() {
     	Set<Ejemplar> ejemplares = S_ejemplar.findAll();
@@ -257,92 +291,97 @@ public class InvernaderoFachadaPersonal {
         }
     	
     }
-    
-    private void filtrarEjemplarestipoplanta() {
-        Set<Planta> plantas = S_planta.find();
-        if (plantas.isEmpty()) {
-            System.out.println("No hay plantas disponibles en el sistema.");
-            return;
-        }
 
-        System.out.println("Selecciona el tipo de planta que deseas ver sus ejemplares:");
-        int index = 1;
-        for (Planta p : plantas) {
-            System.out.println(index + " - " + p.getNombrecomun());
-            index++;
-        }
-
-        // Obtener la selección del usuario
-        int seleccion = sc.nextInt();
-        if (seleccion < 1 || seleccion > plantas.size()) {
-            System.out.println("Selección no válida.");
-            return;
-        }
-
-        // Obtener el tipo de planta seleccionado
-        Planta tipoplanta = (Planta) plantas.toArray()[seleccion - 1];
-        String tipo_Planta = tipoplanta.getCodigo();
-
-        // Obtener todos los ejemplares del tipo de planta seleccionado
-        List<Ejemplar> ejemplaresTipoPlanta = S_ejemplar.findByPlanta(tipo_Planta);
-        if (ejemplaresTipoPlanta.isEmpty()) {
-            System.out.println("No hay ejemplares para el tipo de planta seleccionado.");
-        } else {
-            for (Ejemplar ejemplar : ejemplaresTipoPlanta) {
-                System.out.println(ejemplar.toString());
-            }
-        }
-    }
-    
-    
-    //MÉTODOS PARA LA GESTIÓN DE MENSAJES
-    
-    
-	private void realizarAnotaciones() {
-		Set<Ejemplar> ejemplares = S_ejemplar.findAll();
-
-		if (ejemplares.isEmpty()) {
-			System.out.println("No hay ejemplares de plantas disponibles en el sistema.");
+	private void filtrarEjemplarestipoplanta() {
+		Set<Planta> plantas = S_planta.find();
+		if (plantas.isEmpty()) {
+			System.out.println("No hay plantas disponibles en el sistema.");
 			return;
 		}
 
-		System.out.println("Selecciona el ejemplar del que deseas realizar una anotación:");
+		System.out.println("Selecciona el tipo de planta que deseas ver sus ejemplares:");
 		int index = 1;
-		for (Ejemplar e : ejemplares) {
-			System.out.println(index + " - " + e.getNombre());
+		for (Planta p : plantas) {
+			System.out.println(index + " - " + p.getNombrecomun());
 			index++;
 		}
-
 		try {
 			// Obtener la selección del usuario
 			int seleccion = sc.nextInt();
-			if (seleccion < 1 || seleccion > ejemplares.size()) {
+			if (seleccion < 1 || seleccion > plantas.size()) {
 				System.out.println("Selección no válida.");
 				return;
 			}
 
-			// Obtener el ejemplar seleccionado
-			Ejemplar ejemplar = (Ejemplar) ejemplares.toArray()[seleccion - 1];
-			long idEjemplar = ejemplar.getId();
+			// Obtener el tipo de planta seleccionado
+			Planta tipoplanta = (Planta) plantas.toArray()[seleccion - 1];
+			String tipo_Planta = tipoplanta.getCodigo();
 
-			System.out.println("Escribe la anotación sobre el ejemplar:");
-			String anotacionUsuario = sc.nextLine().trim();
-
-			// Creo el mensaje(anotación) sobre ese ejemplar
-			Mensaje anotacion = new Mensaje();
-			anotacion.setFechahora(fechaActual);
-			anotacion.setMensaje(anotacionUsuario);
-			anotacion.setId_ejemplar(idEjemplar);
-			anotacion.setId_persona(usuarioActual.getId());
-
-			// Guardo el mensaje en la BD
-			int resultadoMensaje = S_mensaje.insertar(anotacion);
+			// Obtener todos los ejemplares del tipo de planta seleccionado
+			List<Ejemplar> ejemplaresTipoPlanta = S_ejemplar.findByPlanta(tipo_Planta);
+			if (ejemplaresTipoPlanta.isEmpty()) {
+				System.out.println("No hay ejemplares para el tipo de planta seleccionado.");
+			} else {
+				for (Ejemplar ejemplar : ejemplaresTipoPlanta) {
+					System.out.println(ejemplar.toString());
+				}
+			}
 		} catch (InputMismatchException e) {
 			System.out.println("Solo se permiten ingresar números, inténtalo de nuevo.");
-		} finally {
-			sc.close();
+			sc.nextLine();
 		}
 	}
+    
+    //MÉTODOS PARA LA GESTIÓN DE MENSAJES
+    
+    
+    private void realizarAnotaciones() {
+    	Set<Ejemplar> ejemplares = S_ejemplar.findAll();
+
+    	if (ejemplares.isEmpty()) {
+    		System.out.println("No hay ejemplares de plantas disponibles en el sistema.");
+    		return;
+    	}
+
+    	System.out.println("Selecciona el ejemplar del que deseas realizar una anotación:");
+    	int index = 1;
+    	for (Ejemplar e : ejemplares) {
+    		System.out.println(index + " - " + e.getNombre());
+    		index++;
+    	}
+
+    	try {
+    		// Obtener la selección del usuario
+    		int seleccion = sc.nextInt();
+    		sc.nextLine(); // Consumir el salto de línea restante
+
+    		if (seleccion < 1 || seleccion > ejemplares.size()) {
+    			System.out.println("Selección no válida.");
+    			return;
+    		}
+
+    		// Obtener el ejemplar seleccionado
+    		Ejemplar ejemplar = (Ejemplar) ejemplares.toArray()[seleccion - 1];
+    		long idEjemplar = ejemplar.getId();
+
+    		System.out.println("Escribe la anotación sobre el ejemplar:");
+    		String anotacionUsuario = sc.nextLine().trim();
+
+    		// Crear el mensaje (anotación) sobre ese ejemplar
+    		Mensaje anotacion = new Mensaje();
+    		anotacion.setFechahora(fechaActual);
+    		anotacion.setMensaje(anotacionUsuario);
+    		anotacion.setId_ejemplar(idEjemplar);
+    		anotacion.setId_persona(facade.id_Persona);
+
+    		// Guardo el mensaje en la BD
+    		S_mensaje.insertar(anotacion);
+    	} catch (InputMismatchException e) {
+    		System.out.println("Solo se permiten ingresar números, inténtalo de nuevo.");
+    		sc.nextLine();
+    	}
+    }
+
    
    private void mostrarAnotaciones(){
 	   Set<Mensaje> mensajes =S_mensaje.findAll();
@@ -387,15 +426,13 @@ public class InvernaderoFachadaPersonal {
 	        
 	    } catch (InputMismatchException e) {
 	        System.out.println("Solo se permiten ingresar números, inténtalo de nuevo.");
-	    } finally {
-	        sc.close();
+	        sc.nextLine();
 	    }
 	}
 
 
    
    private void filtrarAnotacionesporRangoFecha() {
-	    Scanner sc = new Scanner(System.in);
 	    SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
 	    DateTimeFormatter formatoFechaHora = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -422,7 +459,6 @@ public class InvernaderoFachadaPersonal {
 	        for (Mensaje m : mensajesFiltrados) {
 	            System.out.println("El dia " + m.getFechahora() + "fue realizado el siguiente mensaje/anotación:" + m.getMensaje());
 	        }
-
 	    } catch (ParseException e) {
 	        System.out.println("Formato de fecha incorrecto. Usa el formato dd/MM/yyyy.");
 	    }

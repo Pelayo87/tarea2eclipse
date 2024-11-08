@@ -2,7 +2,6 @@ package servicioImpl;
 
 import java.sql.Date;
 import java.util.Set;
-
 import com.dwes.daoImpl.MensajeDAOImpl;
 import com.dwes.modelo.Mensaje;
 import com.dwes.servicios.ServicioMensaje;
@@ -12,7 +11,6 @@ public class ServicioMensajeImpl implements ServicioMensaje{
 	private MensajeDAOImpl mdi;
 	private MySqlDAOFactory factory;
 	
-
 	public ServicioMensajeImpl() {
 		factory=MySqlDAOFactory.getConexion();
 		mdi=(MensajeDAOImpl)factory.getMensajeDAO();

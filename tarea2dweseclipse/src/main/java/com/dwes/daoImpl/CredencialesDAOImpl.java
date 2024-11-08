@@ -147,6 +147,7 @@ public class CredencialesDAOImpl implements CredencialesDAO{
                 credenciales.setId(rs.getLong("id"));
                 credenciales.setUsuario(rs.getString("usuario"));
                 credenciales.setPassword(rs.getString("password"));
+                credenciales.setId_persona(rs.getLong("id_persona"));
             }
         } catch (SQLException e) {
             System.out.println("Error al buscar las credenciales por usuario: " + e.getMessage());

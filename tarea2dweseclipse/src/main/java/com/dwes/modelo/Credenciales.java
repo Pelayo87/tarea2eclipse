@@ -74,15 +74,12 @@ public class Credenciales {
 	public void setId_persona(long id_persona) {
 		this.id_persona = id_persona;
 	}
-
+	
 	@Override
-    public String toString() {
-        return "Credenciales{" +
-                "id=" + id +
-                ", usuario='" + usuario + '\'' +
-                ", password='" + password + '\'' +
-                '}';
-    }
+	public String toString() {
+		return "Credenciales [id=" + id + ", usuario=" + usuario + ", password=" + password + ", id_persona="
+				+ id_persona + "]";
+	}	
 
 	@Override
 	public int hashCode() {
@@ -100,7 +97,5 @@ public class Credenciales {
 		Credenciales other = (Credenciales) obj;
 		return id == other.id && Objects.equals(password, other.password) && Objects.equals(persona, other.persona)
 				&& Objects.equals(usuario, other.usuario);
-	}
-    
-    
+	}	
 }

@@ -19,7 +19,7 @@ public class InvernaderoFachadaPrincipal {
     private InvernaderoFachadaInvitado facadeInvitado;
     Scanner sc = new Scanner(System.in);
     String nombreusuario;
-    Credenciales usuarioActual;
+    public long id_Persona;
     
     InvernaderoServiciosFactory factoryServicios = InvernaderoServiciosFactory.getServicios();
 
@@ -63,40 +63,30 @@ public class InvernaderoFachadaPrincipal {
         nombreusuario = sc.nextLine().trim();
         System.out.println("Contraseña (password):");
         String contrasena = sc.nextLine().trim();
-
-        // Crear objeto Credenciales con el nombre de usuario y la contraseña
+        
         Credenciales credencialesIngresadas = new Credenciales(nombreusuario, contrasena);
         ServicioCredencialesImpl servicioCredenciales = new ServicioCredencialesImpl();
-
-        // Verificar si las credenciales son correctas
         boolean autenticado = servicioCredenciales.autenticar(credencialesIngresadas);
-
+        
+        
         if (autenticado) {
-            // Buscar las credenciales por nombre de usuario
-            Credenciales credencialesUsuario = servicioCredenciales.findByUsuario(nombreusuario);
-
-            if (credencialesUsuario != null) {
-                long id_persona = credencialesUsuario.getId_persona();
-
+            Credenciales credencialesAutenticadas = servicioCredenciales.findByUsuario(nombreusuario);
+            id_Persona = credencialesAutenticadas.getId_persona();
+            if (credencialesAutenticadas != null) {
                 System.out.println("Inicio de sesión exitoso.");
-
-                // Verificar si es el administrador
+                
                 if ("admin".equalsIgnoreCase(nombreusuario) && "admin".equals(contrasena)) {
                     System.out.println("Inicio de sesión exitoso como administrador.");
                     facadeAdmin.menuadmin();
-                } else {
-                    // Buscar la persona asociada al usuario con el id_persona
-                    usuarioActual = servicioCredenciales.findByPersonaId(id_persona);
+                } else {                    
                     facadePersonal.menu();
-                    System.out.println("Inicio de sesión exitoso.");
                 }
-            } else {
-                System.out.println("No se encontraron las credenciales en la base de datos.");
             }
         } else {
             System.out.println("Nombre de usuario o contraseña incorrectos.");
         }
     }
+
 
     protected int obtenerOpcionUsuario(int maxOpcion) {
         int opcion = -1;

@@ -17,4 +17,8 @@ public interface ServicioPersona {
     Persona findByNombre(String nombre);
     
     Set<Persona> findAll();
+    
+    boolean ExistePersonaNombre(String nombre);
+    
+    boolean ExistePersonaCorreo(String email);
 }

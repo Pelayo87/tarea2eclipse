@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 04-11-2024 a las 11:06:01
+-- Tiempo de generación: 08-11-2024 a las 09:36:35
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -41,8 +41,7 @@ CREATE TABLE `credenciales` (
 --
 
 INSERT INTO `credenciales` (`id`, `usuario`, `password`, `id_persona`) VALUES
-(1, 'admin', 'admin', 1),
-(2, 'tumeme', 'tumeme123', NULL);
+(1, 'admin', 'admin', 1);
 
 -- --------------------------------------------------------
 
@@ -87,8 +86,7 @@ CREATE TABLE `persona` (
 --
 
 INSERT INTO `persona` (`id`, `nombre`, `email`) VALUES
-(1, 'admin', 'admin@gmail.com'),
-(4, 'tumeme', 'tumeme@gmail.com');
+(1, 'admin', 'admin@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -101,14 +99,6 @@ CREATE TABLE `planta` (
   `nombrecomun` varchar(100) DEFAULT NULL,
   `nombrecientifico` varchar(150) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `planta`
---
-
-INSERT INTO `planta` (`codigo`, `nombrecomun`, `nombrecientifico`) VALUES
-('1', 'ROSA', 'ROSAURA'),
-('2', 'MARGARITA', 'MARGARINE');
 
 -- --------------------------------------------------------
 
@@ -177,7 +167,7 @@ ALTER TABLE `seguimiento`
 -- AUTO_INCREMENT de la tabla `credenciales`
 --
 ALTER TABLE `credenciales`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `ejemplar`
@@ -195,7 +185,7 @@ ALTER TABLE `mensaje`
 -- AUTO_INCREMENT de la tabla `persona`
 --
 ALTER TABLE `persona`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Restricciones para tablas volcadas

@@ -17,6 +17,6 @@ public interface PlantaDAO {
     
     Set<Planta> find();
     
-    boolean ExisteCodigo(String codigo);
+    boolean ExistePlanta(String codigo);
 }
 

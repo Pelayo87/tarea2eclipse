@@ -21,63 +21,76 @@ import com.mysql.cj.jdbc.MysqlDataSource;
 
 public class MySqlDAOFactory {
 
-	private Connection con;
-	private static MySqlDAOFactory f;
+    private Connection con;
+    private static MySqlDAOFactory f;
 
-	// el patron factory realiza la conexion
-	private MySqlDAOFactory() {
-		Properties prop = new Properties();
-		MysqlDataSource mysqlDS = new MysqlDataSource();
-		FileInputStream fis;
+    // el patrón factory realiza la conexión
+    private MySqlDAOFactory() {
+        Properties prop = new Properties();
+        MysqlDataSource mysqlDS = new MysqlDataSource();
+        FileInputStream fis;
 
-		try {
-			// Carga el archivo de propiedades
-			fis = new FileInputStream("src/main/resources/db.properties");
-			prop.load(fis);
+        try {
+            // Carga el archivo de propiedades
+            fis = new FileInputStream("src/main/resources/db.properties");
+            prop.load(fis);
 
-			// Configuración de los parámetros de conexión
-			mysqlDS.setUrl(prop.getProperty("url"));
-			mysqlDS.setPassword(prop.getProperty("password"));
-			mysqlDS.setUser(prop.getProperty("user"));
+            // Configuración de los parámetros de conexión
+            mysqlDS.setUrl(prop.getProperty("url"));
+            mysqlDS.setPassword(prop.getProperty("password"));
+            mysqlDS.setUser(prop.getProperty("user"));
 
-			// Establecer la conexión
-			con = mysqlDS.getConnection();
+            // Establecer la conexión
+            con = mysqlDS.getConnection();
 
-		} catch (FileNotFoundException e) {
-			System.out.println("Error: El archivo db.properties no fue encontrado. Verifica la ruta del archivo.");
-			e.printStackTrace();
-		} catch (IOException e) {
-			System.out.println("Error: No se pudieron leer las propiedades del archivo db.properties. Verifica el contenido del archivo.");
-			e.printStackTrace();
-		} catch (SQLException e) {
-			System.out.println("Error de conexión a la base de datos. Verifica el URL, usuario o contraseña.");
-			e.printStackTrace();
-		}
-	}
+        } catch (FileNotFoundException e) {
+            System.out.println("Error: El archivo db.properties no fue encontrado. Verifica la ruta del archivo.");
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("Error: No se pudieron leer las propiedades del archivo db.properties. Verifica el contenido del archivo.");
+            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("Error de conexión a la base de datos. Verifica el URL, usuario o contraseña.");
+            e.printStackTrace();
+        }
+    }
 
-	public PersonaDAO getPersonaDAO() {
-		return new PersonaDAOImpl(con);
-	}
-	
-	public EjemplarDAO getEjemplarDAO() {
-		return new EjemplarDAOImpl(con);
-	}
-	
-	public CredencialesDAO getCredencialesDAO() {
-		return new CredencialesDAOImpl(con);
-	}
-	
-	public PlantaDAO getPlantaDAO() {
-		return new PlantaDAOImpl(con);
-	}
-	
-	public MensajeDAO getMensajeDAO() {
-		return new MensajeDAOImpl(con);
-	}
-	
-	public static MySqlDAOFactory getConexion() {
-		if (f == null)
-			f = new MySqlDAOFactory();
-		return f;
-	}
+    public PersonaDAO getPersonaDAO() {
+        return new PersonaDAOImpl(con);
+    }
+    
+    public EjemplarDAO getEjemplarDAO() {
+        return new EjemplarDAOImpl(con);
+    }
+    
+    public CredencialesDAO getCredencialesDAO() {
+        return new CredencialesDAOImpl(con);
+    }
+    
+    public PlantaDAO getPlantaDAO() {
+        return new PlantaDAOImpl(con);
+    }
+    
+    public MensajeDAO getMensajeDAO() {
+        return new MensajeDAOImpl(con);
+    }
+    
+    public static MySqlDAOFactory getConexion() {
+        if (f == null)
+            f = new MySqlDAOFactory();
+        return f;
+    }
+
+    // Método para cerrar la conexión
+    public void closeConnection() {
+        try {
+            if (con != null && !con.isClosed()) {
+                con.close();
+                System.out.println("Conexión a la base de datos cerrada exitosamente.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al cerrar la conexión a la base de datos.");
+            e.printStackTrace();
+        }
+    }
 }

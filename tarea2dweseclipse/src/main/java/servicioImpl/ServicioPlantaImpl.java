@@ -24,116 +24,144 @@ public class ServicioPlantaImpl implements ServicioPlanta{
 
 	@Override
 	public int insertar(Planta planta) {
-		// Validación del código
 		String codigo;
+		String nombrecomun;
+		String nombrecientifico;
+
+		// Validación del código de la planta
+		boolean codigoCorrecto = false;
 		do {
-		    codigo = planta.getCodigo();
-		    
-		    if (codigo == null || codigo.trim().isEmpty()) {
-		        System.out.println("Ingrese el código de la planta (solo letras):");
-		        codigo = sc.nextLine().trim().toUpperCase();
-		        
-		        // Valido que el código solo contenga letras
-		        if (!codigo.matches("[a-zA-Z]+")) {
-		            System.err.println("El código solo puede contener letras. Inténtelo de nuevo.");
-		            codigo = "";
-		        } else {
-		            planta.setCodigo(codigo);
-		        }
-		    } else if (pdi.ExisteCodigo(codigo)) {
-		        System.err.println("El código '" + codigo + "' ya está en uso. Por favor, ingrese un código diferente:");
-		        codigo = sc.nextLine().trim().toUpperCase();
-		        planta.setCodigo(codigo);
-		    }
-		} while (codigo == null || codigo.trim().isEmpty() || pdi.ExisteCodigo(codigo) || !codigo.matches("[a-zA-Z]+"));
+			System.out.println("Dame el código de la nueva planta:");
+			codigo = sc.nextLine().trim().toUpperCase();
 
+			if (codigo == null || codigo.isEmpty()) {
+				System.err.println("El código no puede ser nulo o vacío. Inténtelo de nuevo.");
+			} else if (!codigo.matches("[a-zA-Z]+")) {
+				System.err.println("El código solo puede contener letras. Inténtelo de nuevo.");
+			} else if (pdi.ExistePlanta(codigo)) {
+				System.err.println("El código '" + codigo + "' ya está en uso. Inténtelo de nuevo.");
+			} else {
+				codigoCorrecto = true;
+			}
+		} while (!codigoCorrecto);
 
-	    // Validación del nombre común
-	    String nombreComun;
-	    do {
-	        nombreComun = planta.getNombrecomun();
-	        if (nombreComun == null || nombreComun.trim().isEmpty()) {
-	            System.out.println("El nombre común de la planta no puede ser nulo o vacío. Por favor, ingrese un nombre válido:");
-	            nombreComun = sc.nextLine().trim().toUpperCase();
-	            planta.setNombrecomun(nombreComun);
-	        } else if (!LETTERS_ONLY_PATTERN.matcher(nombreComun).matches()) {
-	            System.err.println("El nombre común de la planta solo puede contener letras. Por favor, ingrese un nombre válido:");
-	            nombreComun = sc.nextLine().trim().toUpperCase();
-	            planta.setNombrecomun(nombreComun);
-	        }
-	    } while (nombreComun == null || nombreComun.trim().isEmpty() || !LETTERS_ONLY_PATTERN.matcher(nombreComun).matches());
+		// Validación del nombre común
+		boolean nombreComunCorrecto = false;
+		do {
+			System.out.println("Dame el nombre común de la planta:");
+			nombrecomun = sc.nextLine().trim().toUpperCase();
+			if (nombrecomun == null || nombrecomun.trim().isEmpty()) {
+				System.err.println("El nombre común de la planta no puede ser nulo o vacío.");
+			} else if (!LETTERS_ONLY_PATTERN.matcher(nombrecomun).matches()) {
+				System.err.println("El nombre común de la planta solo puede contener letras.");
+			} else {
+				nombreComunCorrecto = true;
+			}
+		} while (!nombreComunCorrecto);
 
-	    // Validación del nombre científico
-	    String nombreCientifico;
-	    do {
-	        nombreCientifico = planta.getNombrecientifico();
-	        if (nombreCientifico == null || nombreCientifico.trim().isEmpty()) {
-	            System.err.println("El nombre científico de la planta no puede ser nulo o vacío. Por favor, ingrese un nombre válido:");
-	            nombreCientifico = sc.nextLine().trim().toUpperCase();
-	            planta.setNombrecientifico(nombreCientifico);
-	        } else if (!LETTERS_ONLY_PATTERN.matcher(nombreCientifico).matches()) {
-	            System.err.println("El nombre científico de la planta solo puede contener letras. Por favor, ingrese un nombre válido:");
-	            nombreCientifico = sc.nextLine().trim().toUpperCase();
-	            planta.setNombrecientifico(nombreCientifico);
-	        }
-	    } while (nombreCientifico == null || nombreCientifico.trim().isEmpty() || !LETTERS_ONLY_PATTERN.matcher(nombreCientifico).matches());
+		// Validación del nombre científico
+		boolean nombreCientificoCorrecto = false;
+		do {
+			System.out.println("Dame el nombre científico de la planta:");
+			nombrecientifico = sc.nextLine().trim().toUpperCase();
+			if (nombrecientifico == null || nombrecientifico.trim().isEmpty()) {
+				System.err.println("El nombre científico de la planta no puede ser nulo o vacío.");
+			} else if (!LETTERS_ONLY_PATTERN.matcher(nombrecientifico).matches()) {
+				System.err.println("El nombre científico de la planta solo puede contener letras.");
+			} else {
+				nombreCientificoCorrecto = true;
+			}
+		} while (!nombreCientificoCorrecto);
 
-	    try {
-	        return pdi.insertar(planta);
-	    } catch (Exception e) {
-	        System.err.println("Error al insertar la planta: " + e.getMessage());
-	        return -1; 
-	    }
+		Planta nuevaplanta = new Planta(codigo, nombrecomun, nombrecientifico);
+
+		return pdi.insertar(nuevaplanta);
 	}
 
 
     @Override
     public int modificar(Planta planta) {
-    	// Validación del nombre común
-	    String nombreComun;
-	    do {
-	        nombreComun = planta.getNombrecomun();
-	        if (nombreComun == null || nombreComun.trim().isEmpty()) {
-	            System.out.println("El nombre común de la planta no puede ser nulo o vacío. Por favor, ingrese un nombre válido:");
-	            nombreComun = sc.nextLine().trim().toUpperCase();
-	            planta.setNombrecomun(nombreComun);
-	        } else if (!LETTERS_ONLY_PATTERN.matcher(nombreComun).matches()) {
-	            System.err.println("El nombre común de la planta solo puede contener letras. Por favor, ingrese un nombre válido:");
-	            nombreComun = sc.nextLine().trim().toUpperCase();
-	            planta.setNombrecomun(nombreComun);
-	        }
-	    } while (nombreComun == null || nombreComun.trim().isEmpty() || !LETTERS_ONLY_PATTERN.matcher(nombreComun).matches());
+    	
+    	String codigo;
+		String nombrecomun;
+		String nombrecientifico;
 
-	    // Validación del nombre científico
-	    String nombreCientifico;
-	    do {
-	        nombreCientifico = planta.getNombrecientifico();
-	        if (nombreCientifico == null || nombreCientifico.trim().isEmpty()) {
-	            System.err.println("El nombre científico de la planta no puede ser nulo o vacío. Por favor, ingrese un nombre válido:");
-	            nombreCientifico = sc.nextLine().trim().toUpperCase();
-	            planta.setNombrecientifico(nombreCientifico);
-	        } else if (!LETTERS_ONLY_PATTERN.matcher(nombreCientifico).matches()) {
-	            System.err.println("El nombre científico de la planta solo puede contener letras. Por favor, ingrese un nombre válido:");
-	            nombreCientifico = sc.nextLine().trim().toUpperCase();
-	            planta.setNombrecientifico(nombreCientifico);
-	        }
-	    } while (nombreCientifico == null || nombreCientifico.trim().isEmpty() || !LETTERS_ONLY_PATTERN.matcher(nombreCientifico).matches());
+		// Validación del código de la planta
+		boolean codigoCorrecto = false;
+		do {
+			System.out.println("Dame el código de la nueva planta:");
+			codigo = sc.nextLine().trim().toUpperCase();
 
-	    try {
-	        return pdi.insertar(planta);
-	    } catch (Exception e) {
-	        System.err.println("Error al insertar la planta: " + e.getMessage());
-	        return -1; 
-	    }
+			if (codigo == null || codigo.isEmpty()) {
+				System.err.println("El código no puede ser nulo o vacío. Inténtelo de nuevo.");
+			} else if (!codigo.matches("[a-zA-Z]+")) {
+				System.err.println("El código solo puede contener letras. Inténtelo de nuevo.");
+			} else if (!pdi.ExistePlanta(codigo)) {
+				System.err.println("El código '" + codigo + "' no existe. Inténtelo de nuevo.");
+			} else {
+				codigoCorrecto = true;
+			}
+		} while (!codigoCorrecto);
+
+		// Validación del nombre común
+		boolean nombreComunCorrecto = false;
+		do {
+			System.out.println("Dame el nombre común de la planta:");
+			nombrecomun = sc.nextLine().trim().toUpperCase();
+			if (nombrecomun == null || nombrecomun.trim().isEmpty()) {
+				System.err.println("El nombre común de la planta no puede ser nulo o vacío.");
+			} else if (!LETTERS_ONLY_PATTERN.matcher(nombrecomun).matches()) {
+				System.err.println("El nombre común de la planta solo puede contener letras.");
+			} else {
+				nombreComunCorrecto = true;
+			}
+		} while (!nombreComunCorrecto);
+
+		// Validación del nombre científico
+		boolean nombreCientificoCorrecto = false;
+		do {
+			System.out.println("Dame el nombre científico de la planta:");
+			nombrecientifico = sc.nextLine().trim().toUpperCase();
+			if (nombrecientifico == null || nombrecientifico.trim().isEmpty()) {
+				System.err.println("El nombre científico de la planta no puede ser nulo o vacío.");
+			} else if (!LETTERS_ONLY_PATTERN.matcher(nombrecientifico).matches()) {
+				System.err.println("El nombre científico de la planta solo puede contener letras.");
+			} else {
+				nombreCientificoCorrecto = true;
+			}
+		} while (!nombreCientificoCorrecto);
+
+		Planta cambioplanta = new Planta(codigo, nombrecomun, nombrecientifico);
+		
+	    return pdi.modificar(cambioplanta);
     }
 
-    @Override
-    public int eliminar(Planta planta) {
-        if (planta == null || planta.getCodigo() == null || planta.getCodigo().trim().isEmpty()) {
-            throw new IllegalArgumentException("La planta y su código no pueden ser null o vacíos.");
-        }
-        return pdi.eliminar(planta);
-    }
+	@Override
+	public int eliminar(Planta planta) {
+
+		String codigo;
+
+		// Validación del código de la planta
+		boolean codigoCorrecto = false;
+		do {
+			System.out.println("Dame el código de la nueva planta:");
+			codigo = sc.nextLine().trim().toUpperCase();
+
+			if (codigo == null || codigo.isEmpty()) {
+				System.err.println("El código no puede ser nulo o vacío. Inténtelo de nuevo.");
+			} else if (!codigo.matches("[a-zA-Z]+")) {
+				System.err.println("El código solo puede contener letras. Inténtelo de nuevo.");
+			} else if (!pdi.ExistePlanta(codigo)) {
+				System.err.println("El código '" + codigo + "' no existe. Inténtelo de nuevo.");
+			} else {
+				codigoCorrecto = true;
+			}
+		} while (!codigoCorrecto);
+		
+		Planta eliminarplanta = new Planta(codigo, null, null);
+		
+		return pdi.eliminar(eliminarplanta);
+	}
 
     @Override
     public Planta findById(String codigo) {
@@ -158,7 +186,7 @@ public class ServicioPlantaImpl implements ServicioPlanta{
 
 	@Override
 	public boolean ExisteCodigo(String codigo) {
-		return pdi.ExisteCodigo(codigo);
+		return pdi.ExistePlanta(codigo);
 	}
 
 }

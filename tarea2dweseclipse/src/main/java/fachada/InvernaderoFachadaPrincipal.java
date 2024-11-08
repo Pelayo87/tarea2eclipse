@@ -19,7 +19,7 @@ public class InvernaderoFachadaPrincipal {
     private InvernaderoFachadaInvitado facadeInvitado;
     Scanner sc = new Scanner(System.in);
     String nombreusuario;
-    Persona usuarioActual;
+    Credenciales usuarioActual;
     
     InvernaderoServiciosFactory factoryServicios = InvernaderoServiciosFactory.getServicios();
 
@@ -64,27 +64,34 @@ public class InvernaderoFachadaPrincipal {
         System.out.println("Contraseña (password):");
         String contrasena = sc.nextLine().trim();
 
+        // Crear objeto Credenciales con el nombre de usuario y la contraseña
         Credenciales credencialesIngresadas = new Credenciales(nombreusuario, contrasena);
         ServicioCredencialesImpl servicioCredenciales = new ServicioCredencialesImpl();
 
+        // Verificar si las credenciales son correctas
         boolean autenticado = servicioCredenciales.autenticar(credencialesIngresadas);
 
         if (autenticado) {
-            // Obtener el servicio de persona para buscar la persona actual
-            ServicioPersona servicioPersona = new ServicioPersonaImpl();
-            usuarioActual = servicioPersona.findByNombre(nombreusuario);
+            // Buscar las credenciales por nombre de usuario
+            Credenciales credencialesUsuario = servicioCredenciales.findByUsuario(nombreusuario);
 
-            if (usuarioActual != null) {
+            if (credencialesUsuario != null) {
+                long id_persona = credencialesUsuario.getId_persona();
+
                 System.out.println("Inicio de sesión exitoso.");
 
+                // Verificar si es el administrador
                 if ("admin".equalsIgnoreCase(nombreusuario) && "admin".equals(contrasena)) {
                     System.out.println("Inicio de sesión exitoso como administrador.");
                     facadeAdmin.menuadmin();
                 } else {
+                    // Buscar la persona asociada al usuario con el id_persona
+                    usuarioActual = servicioCredenciales.findByPersonaId(id_persona);
                     facadePersonal.menu();
+                    System.out.println("Inicio de sesión exitoso.");
                 }
             } else {
-                System.out.println("No se encontró el usuario en la base de datos.");
+                System.out.println("No se encontraron las credenciales en la base de datos.");
             }
         } else {
             System.out.println("Nombre de usuario o contraseña incorrectos.");

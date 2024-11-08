@@ -6,6 +6,7 @@ public class Credenciales {
     private long id;
     private String usuario;
     private String password;
+    private long id_persona;
     
     // Relación 1 a 1 con Persona
     private Persona persona;
@@ -19,6 +20,12 @@ public class Credenciales {
 		this.usuario = usuario;
 		this.password = password;
 	}
+	
+	public Credenciales(String usuario, String password, Persona persona) {
+        this.usuario = usuario;
+        this.password = password;
+        this.persona = persona;
+    }
 
 	public Credenciales(long id, String usuario, String password, Persona persona) {
 		super();
@@ -59,8 +66,16 @@ public class Credenciales {
     public void setPersona(Persona persona) {
         this.persona = persona;
     }
+    
+    public long getId_persona() {
+		return id_persona;
+	}
 
-    @Override
+	public void setId_persona(long id_persona) {
+		this.id_persona = id_persona;
+	}
+
+	@Override
     public String toString() {
         return "Credenciales{" +
                 "id=" + id +

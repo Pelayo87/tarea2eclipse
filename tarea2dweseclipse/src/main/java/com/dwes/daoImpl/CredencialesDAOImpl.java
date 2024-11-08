@@ -31,13 +31,14 @@ public class CredencialesDAOImpl implements CredencialesDAO{
      */
 
     @Override
-    public int insertar(Credenciales credenciales) {
+    public int insertar(Credenciales credenciales) {	
         int resultado = 0;
         try {
-            ps = con.prepareStatement("INSERT INTO credenciales(id, usuario, password) VALUES (?, ?, ?)");
+            ps = con.prepareStatement("INSERT INTO credenciales(id, usuario, password, id_persona) VALUES (?, ?, ?, ?)");
             ps.setLong(1, credenciales.getId());         
             ps.setString(2, credenciales.getUsuario());
             ps.setString(3, credenciales.getPassword());
+            ps.setLong(4, credenciales.getId_persona());
 
             resultado = ps.executeUpdate();            
             System.out.println("Credenciales insertadas correctamente.");
@@ -124,6 +125,7 @@ public class CredencialesDAOImpl implements CredencialesDAO{
         }
         return credenciales;
     }
+
     
     /**
      * Busca las credenciales por nombre de usuario.
@@ -135,6 +137,7 @@ public class CredencialesDAOImpl implements CredencialesDAO{
     public Credenciales findByUsuario(String usuario) {
         Credenciales credenciales = null;
         try {
+            // Buscar las credenciales por el nombre de usuario
             ps = con.prepareStatement("SELECT * FROM credenciales WHERE usuario = ?");
             ps.setString(1, usuario);
             rs = ps.executeQuery();
@@ -150,6 +153,7 @@ public class CredencialesDAOImpl implements CredencialesDAO{
         }
         return credenciales;
     }
+
     
     /**
      * Devuelve un conjunto de todas las credenciales.

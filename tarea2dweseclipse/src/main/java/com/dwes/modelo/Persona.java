@@ -17,6 +17,11 @@ public class Persona {
     public Persona() {
 		super();
 	}
+    
+	public Persona(long id) {
+		super();
+		this.id = id;
+	}
 
 	public Persona(long id, String nombre, String email, Credenciales credenciales, Set<Ejemplar> ejemplares) {
 		super();

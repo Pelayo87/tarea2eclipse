@@ -3,7 +3,9 @@ package servicioImpl;
 import java.util.Scanner;
 import java.util.Set;
 import com.dwes.daoImpl.CredencialesDAOImpl;
+import com.dwes.daoImpl.PersonaDAOImpl;
 import com.dwes.modelo.Credenciales;
+import com.dwes.modelo.Persona;
 import com.dwes.servicios.ServicioCredenciales;
 import com.dwes.util.MySqlDAOFactory;
 
@@ -27,13 +29,15 @@ public class ServicioCredencialesImpl implements ServicioCredenciales{
 
 	@Override
 	public int insertar(Credenciales credenciales) {
-		
-		// Validación nombre de usuario
 	    String nombreUsuario;
+	    String password;
+
+	    // Validación nombre de usuario
+	    boolean nombreCorrecto = false;
 	    do {
 	        System.out.println("Introduce un nombre de usuario:");
 	        nombreUsuario = sc.nextLine().trim();
-	        
+
 	        if (nombreUsuario == null || nombreUsuario.isEmpty()) {
 	            System.err.println("El nombre de usuario no puede ser nulo o vacío. Inténtelo de nuevo.");
 	        } else if (nombreUsuario.length() < 4) {
@@ -44,33 +48,36 @@ public class ServicioCredencialesImpl implements ServicioCredenciales{
 	            System.err.println("El nombre de usuario debe contener al menos una letra. Inténtelo de nuevo.");
 	        } else if (!nombreUsuario.matches(".*[0-9].*")) {
 	            System.err.println("El nombre de usuario debe contener al menos un número. Inténtelo de nuevo.");
-	            nombreUsuario="";
 	        } else {
-	            credenciales.setUsuario(nombreUsuario);
+	            nombreCorrecto = true;
 	        }
-	        
-	    } while (nombreUsuario == null || nombreUsuario.isEmpty() || nombreUsuario.length() < 4 || !nombreUsuario.matches("[a-zA-Z0-9]+"));
-	    
-		//Validación contraseña usuario
-	    String contraseña;
-	    do {
-	    	System.out.println("Introduce un nombre de usuario:");
-	    	contraseña = sc.nextLine().trim();
-		    if (contraseña == null || contraseña.isEmpty()) {
-		    	System.err.println("El nombre no puede ser nulo o vacío. Inténtelo de nuevo.");
-		    }else if (contraseña.length() < 8) {
-		    	System.err.println("La contraseña debe tener al menos 8 caracteres. Inténtelo de nuevo.");
-		    }else if (!contraseña.matches(".*[!@#$%^&*(),.?\":{}|<>].*")) {
-		    	System.err.println("El nombre no puede ser nulo o vacío. Inténtelo de nuevo.");
-		    	contraseña = ""; 
-		    }else {
-	            credenciales.setPassword(contraseña);
-	        }	    	
-	    }while(contraseña==null || contraseña.isEmpty());
 
-	   	// Llamada a la capa DAO
-	    return cdi.insertar(credenciales);
+	    } while (!nombreCorrecto);
+
+	    // Validación contraseña
+	    boolean passwordCorrecto = false;
+	    do {
+	        System.out.println("Introduce una contraseña:");
+	        password = sc.nextLine().trim();
+
+	        if (password == null || password.isEmpty()) {
+	            System.err.println("La contraseña no puede ser nula o vacía. Inténtelo de nuevo.");
+	        } else if (password.length() < 8) {
+	            System.err.println("La contraseña debe tener al menos 8 caracteres. Inténtelo de nuevo.");
+	        } else if (!password.matches(".*[!@#$%^&*(),.?\":{}|<>].*")) {
+	            System.err.println("La contraseña debe contener al menos un carácter especial. Inténtelo de nuevo.");
+	        } else {
+	            passwordCorrecto = true;
+	        }
+
+	    } while (!passwordCorrecto);
+	        credenciales.setUsuario(nombreUsuario);
+	        credenciales.setPassword(password);
+	        credenciales.setId_persona(PersonaDAOImpl.personaId);
+	        //Guardo las credenciales en la BD
+	        return cdi.insertar(credenciales);
 	}
+
 
 
 	@Override

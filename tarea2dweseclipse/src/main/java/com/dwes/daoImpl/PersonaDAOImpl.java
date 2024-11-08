@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,6 +20,7 @@ public class PersonaDAOImpl implements PersonaDAO{
 	private Connection con;
     PreparedStatement ps;
     private ResultSet rs;
+    public static int personaId;
     
     // Constructor que recibe la conexión
     public PersonaDAOImpl(Connection con) {
@@ -35,18 +37,28 @@ public class PersonaDAOImpl implements PersonaDAO{
     public int insertar(Persona persona) {
         int resultado = 0;
         try {
-            ps = con.prepareStatement("INSERT INTO persona(id, nombre, email) VALUES (?, ?, ?)");
-            ps.setLong(1, persona.getId());
-            ps.setString(2, persona.getNombre());
-            ps.setString(3, persona.getEmail());
-            
+            // Usamos Statement.RETURN_GENERATED_KEYS para obtener el ID generado automáticamente
+            ps = con.prepareStatement("INSERT INTO persona(nombre, email) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, persona.getNombre());
+            ps.setString(2, persona.getEmail());
+
             resultado = ps.executeUpdate();
-            System.out.println("Persona insertada correctamente.");
+            
+            // Obtener el ID generado
+            if (resultado > 0) {
+                rs = ps.getGeneratedKeys();
+                if (rs.next()) {
+                    personaId = rs.getInt(1);
+                    persona.setId(personaId);
+                    System.out.println("Persona insertada correctamente con ID: " + personaId);
+                }
+            }
         } catch (SQLException e) {
             System.out.println("Error al insertar la persona: " + e.getMessage());
         }
         return resultado;
     }
+
 
     @Override
     public int modificar(Persona persona) {
@@ -144,4 +156,36 @@ public class PersonaDAOImpl implements PersonaDAO{
         }
         return personas;
     }
+
+	@Override
+	public boolean ExistePersonaNombre(String nombre) {
+		boolean exists = false;
+	    try {
+	        ps = con.prepareStatement("SELECT COUNT(*) FROM persona WHERE nombre = ?");
+	        ps.setString(1, nombre);
+	        rs = ps.executeQuery();
+	        if (rs.next()) {
+	            exists = rs.getInt(1) > 0;
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error al verificar la existencia del código: " + e.getMessage());
+	    }
+	    return exists;
+	}
+
+	@Override
+	public boolean ExistePersonaCorreo(String email) {
+		boolean exists = false;
+	    try {
+	        ps = con.prepareStatement("SELECT COUNT(*) FROM persona WHERE email = ?");
+	        ps.setString(1, email);
+	        rs = ps.executeQuery();
+	        if (rs.next()) {
+	            exists = rs.getInt(1) > 0;
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error al verificar la existencia del código: " + e.getMessage());
+	    }
+	    return exists;
+	}
 }

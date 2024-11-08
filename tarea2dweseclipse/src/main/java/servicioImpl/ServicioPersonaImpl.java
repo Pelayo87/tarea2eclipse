@@ -26,42 +26,51 @@ public class ServicioPersonaImpl implements ServicioPersona{
 
 	@Override
 	public int insertar(Persona persona) {
+
+		String nombrePersona;
+		String emailPersona;
+
 		// Validación nombre real
-	    String nombre;
-	    do {
-	        System.out.println("Introduce tu nombre real:");
-	        nombre = sc.nextLine().trim();
-	        
-	        if (nombre.isEmpty()) {
-	            System.err.println("El nombre no puede estar vacío. Inténtelo de nuevo.");
-	        } else if (!nombre.matches("[a-zA-Z]+")) {
-	            System.err.println("El nombre solo debe contener letras. Inténtelo de nuevo.");
-	            nombre = "";
-	        } else {
-	            persona.setNombre(nombre);
-	        }
-	        
-	    } while (nombre.isEmpty() || !nombre.matches("[a-zA-Z]+"));
-	    
-	    // Validación email
-	    String email;
-	    do {
-	        System.out.println("Introduce tu email (correo electrónico):");
-	        email = sc.nextLine().trim();
-	        
-	        if (email.isEmpty()) {
-	            System.err.println("El email no puede estar vacío. Inténtelo de nuevo.");
-	        } else if (!EMAIL_PATTERN.matcher(email).matches()) {
-	            System.err.println("El email es inválido. Debe tener un formato correcto. Inténtelo de nuevo.");
-	            email = "";
-	        } else {
-	            persona.setEmail(email);
-	        }
-	        
-	    } while (email.isEmpty() || !EMAIL_PATTERN.matcher(email).matches());
-	    
-	    // Llamada a la capa DAO
-	    return pedi.insertar(persona);
+		boolean nombreCorrecto = false;
+		do {
+			System.out.println("Introduce tu nombre real:");
+			nombrePersona = sc.nextLine().trim();
+
+			if (nombrePersona.isEmpty()) {
+				System.err.println("El nombre no puede estar vacío. Inténtelo de nuevo.");
+			} else if (!nombrePersona.matches("[a-zA-Z]+")) {
+				System.err.println("El nombre solo debe contener letras. Inténtelo de nuevo.");
+			} else if (pedi.ExistePersonaNombre(nombrePersona)) {
+				System.err.println("Ya hay un'" + nombrePersona + "' en uso. Inténtelo de nuevo.");
+			} else {
+				nombreCorrecto = true;
+			}
+		} while (!nombreCorrecto);
+
+		// Validación email
+		boolean emailCorrecto = false;
+		do {
+			System.out.println("Introduce tu email (correo electrónico):");
+			emailPersona = sc.nextLine().trim().toLowerCase();
+
+			if (emailPersona.isEmpty()) {
+				System.err.println("El email no puede estar vacío. Inténtelo de nuevo.");
+			} else if (!EMAIL_PATTERN.matcher(emailPersona).matches()) {
+				System.err.println("El email es inválido. Debe tener un formato correcto. Inténtelo de nuevo.");
+			} else if (pedi.ExistePersonaCorreo(emailPersona)) {
+				System.err.println("El correo '" + emailPersona + "' ya esta en uso. Inténtelo de nuevo.");
+			} else {
+				emailCorrecto = true;
+			}
+		} while (!emailCorrecto);
+
+		// Crear instancia de Persona
+		Persona nuevaPersona = new Persona();
+		nuevaPersona.setNombre(nombrePersona);
+		nuevaPersona.setEmail(emailPersona);
+
+		// Llamada a la capa DAO
+		return pedi.insertar(nuevaPersona);
 	}
 
 	@Override
@@ -87,5 +96,15 @@ public class ServicioPersonaImpl implements ServicioPersona{
 	@Override
 	public Set<Persona> findAll() {
 		return pedi.findAll();
+	}
+
+	@Override
+	public boolean ExistePersonaNombre(String nombre) {
+		return pedi.ExistePersonaNombre(nombre);
+	}
+
+	@Override
+	public boolean ExistePersonaCorreo(String email) {
+		return pedi.ExistePersonaCorreo(email);
 	}
 }

@@ -123,7 +123,7 @@ public class PlantaDAOImpl implements PlantaDAO{
      */
 	
 	@Override
-	public boolean ExisteCodigo(String codigo) {
+	public boolean ExistePlanta(String codigo) {
 	    boolean exists = false;
 	    try {
 	        ps = con.prepareStatement("SELECT COUNT(*) FROM planta WHERE codigo = ?");

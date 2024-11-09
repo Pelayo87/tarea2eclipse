@@ -15,6 +15,7 @@ import com.dwes.servicios.ServicioMensaje;
 import com.dwes.servicios.ServicioPersona;
 import com.dwes.servicios.ServicioPlanta;
 import com.dwes.util.InvernaderoServiciosFactory;
+import com.dwes.util.Utilidades;
 
 public class InvernaderoFachadaInvitado {
 	private InvernaderoFachadaPrincipal facade;
@@ -41,9 +42,10 @@ public class InvernaderoFachadaInvitado {
             System.out.println("\n\n\n\n\n\t\t\t\tPERFIL INVITADO\n");
             System.out.println("\t\t\t\t1 - VER PLANTAS");
             System.out.println("\t\t\t\t2 - LOGIN");
-            System.out.println("\t\t\t\t3 - SALIR");
+            System.out.println("\t\t\t\t3 - SALIR DEL PROGRAMA");
+            System.out.println("\t\t\t\t4 - VOLVER ATRAS");
 
-            opcion = facade.obtenerOpcionUsuario(3);
+            opcion = Utilidades.obtenerOpcionUsuario(4);
 
             switch (opcion) {
                 case 1: {
@@ -53,6 +55,9 @@ public class InvernaderoFachadaInvitado {
                 case 2: {
                     facade.login();
                     break;
+                }
+                case 3: {
+                	Utilidades.salirdelprograma();
                 }
             }
         } while (opcion != 3);

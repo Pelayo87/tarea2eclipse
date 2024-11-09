@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Utilidades {
@@ -50,6 +51,36 @@ public class Utilidades {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Error al encriptar la contraseña", e);
         }
+    }
+    
+    public static int obtenerOpcionUsuario(int maxOpcion) {
+    	Scanner sc = new Scanner(System.in);
+        int opcion = -1;
+        boolean entradaValida = false;
+        while (!entradaValida) {
+            try {
+                if (sc.hasNextInt()) {
+                    opcion = sc.nextInt();
+                    sc.nextLine();
+                    if (opcion >= 1 && opcion <= maxOpcion) {
+                        entradaValida = true;
+                    } else {
+                        System.err.println("Por favor, ingresa un número entre 1 y " + maxOpcion + ".");
+                    }
+                } else {
+                    System.err.println("Entrada no válida. Por favor, ingresa un número entre 1 y " + maxOpcion + ".");
+                    sc.next();
+                }
+            } catch (InputMismatchException e) {
+                System.err.println("Error de entrada. Inténtalo de nuevo.");
+                sc.next();
+            }
+        }
+        return opcion;
+    }
+    
+    public static void salirdelprograma() {
+    	System.exit(0);
     }
 }
 

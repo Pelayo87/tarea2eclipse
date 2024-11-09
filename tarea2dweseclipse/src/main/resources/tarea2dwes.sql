@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-11-2024 a las 09:36:35
+-- Tiempo de generación: 09-11-2024 a las 18:32:18
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -100,17 +100,6 @@ CREATE TABLE `planta` (
   `nombrecientifico` varchar(150) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `seguimiento`
---
-
-CREATE TABLE `seguimiento` (
-  `id_ejemplar` int(11) NOT NULL,
-  `id_mensaje` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 --
 -- Índices para tablas volcadas
 --
@@ -151,13 +140,6 @@ ALTER TABLE `persona`
 ALTER TABLE `planta`
   ADD PRIMARY KEY (`codigo`),
   ADD UNIQUE KEY `codigo` (`codigo`);
-
---
--- Indices de la tabla `seguimiento`
---
-ALTER TABLE `seguimiento`
-  ADD PRIMARY KEY (`id_ejemplar`,`id_mensaje`),
-  ADD KEY `id_mensaje` (`id_mensaje`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -209,13 +191,6 @@ ALTER TABLE `ejemplar`
 ALTER TABLE `mensaje`
   ADD CONSTRAINT `mensaje_ibfk_1` FOREIGN KEY (`id_ejemplar`) REFERENCES `ejemplar` (`id`),
   ADD CONSTRAINT `mensaje_ibfk_2` FOREIGN KEY (`id_persona`) REFERENCES `persona` (`id`);
-
---
--- Filtros para la tabla `seguimiento`
---
-ALTER TABLE `seguimiento`
-  ADD CONSTRAINT `seguimiento_ibfk_1` FOREIGN KEY (`id_ejemplar`) REFERENCES `ejemplar` (`id`),
-  ADD CONSTRAINT `seguimiento_ibfk_2` FOREIGN KEY (`id_mensaje`) REFERENCES `mensaje` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

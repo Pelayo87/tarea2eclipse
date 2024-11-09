@@ -1,14 +1,10 @@
 package servicioImpl;
 
 import java.util.List;
-import java.util.Scanner;
 import java.util.Set;
 import com.dwes.daoImpl.EjemplarDAOImpl;
 import com.dwes.modelo.Ejemplar;
-import com.dwes.modelo.Planta;
 import com.dwes.servicios.ServicioEjemplar;
-import com.dwes.servicios.ServicioPlanta;
-import com.dwes.util.InvernaderoServiciosFactory;
 import com.dwes.util.MySqlDAOFactory;
 
 public class ServicioEjemplarImpl implements ServicioEjemplar{

@@ -12,12 +12,7 @@ public class Principal {
         
         System.out.println("--Bienvenido al sistema del invernadero (DWES)--");
         
-        facade.iniciosesion();
-        
-        factory.closeConnection();
-        
-        System.out.println("PROGRAMA CERRADO");
-        
+        facade.iniciosesion();       
     }
 }
 

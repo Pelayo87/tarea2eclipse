@@ -9,9 +9,11 @@ import com.dwes.servicios.ServicioMensaje;
 import com.dwes.servicios.ServicioPersona;
 import com.dwes.servicios.ServicioPlanta;
 import com.dwes.util.InvernaderoServiciosFactory;
+import com.dwes.util.Utilidades;
 
 public class InvernaderoFachadaAdmin {
 	private InvernaderoFachadaPrincipal facade;
+	private InvernaderoFachadaPersonal facadePersonal;
 	Scanner sc = new Scanner(System.in);
 	String nombreusuario;
 	Persona usuarioActual;
@@ -25,43 +27,57 @@ public class InvernaderoFachadaAdmin {
 	ServicioPersona S_persona = factoryServicios.getServiciosPersona();
 
 	public InvernaderoFachadaAdmin(InvernaderoFachadaPrincipal facade) {
-		this.facade = facade;
-	}
+        this.facade = facade;
+        this.facadePersonal = new InvernaderoFachadaPersonal(facade);
+    }
 
 	public void menuadmin() {
 		int opcion = -1;
-		do {
-			System.out.println("\n\n\n\n\n\t\t\t\tADMINISTRADOR INVERNADERO\n");
-			System.out.println("\t\t\t\t1 - GESTIÓN DE PLANTAS");
-			System.out.println("\t\t\t\t2 - GESTIÓN DE PERSONAS");
-			System.out.println("\t\t\t\t3 - SALIR");
+		System.out.println("\n\n\n\n\n\t\t\t\tADMINISTRADOR INVERNADERO\n");
+		System.out.println("\t\t\t\t1 - GESTIÓN DE PLANTAS");
+		System.out.println("\t\t\t\t2 - GESTIÓN DE PERSONAS");
+		System.out.println("\t\t\t\t3 - GESTIÓN DE EJEMPLARES");
+		System.out.println("\t\t\t\t4 - GESTIÓN DE MENSAJES");
+		System.out.println("\t\t\t\t5 - CERRAR SESIÓN");
+		System.out.println("\t\t\t\t6 - SALIR DEL PROGRAMA");
 
-			opcion = facade.obtenerOpcionUsuario(3);
+		opcion = Utilidades.obtenerOpcionUsuario(6);
 
-			switch (opcion) {
-			case 1: {
-				menuadminplantas();
-				break;
-			}
-			case 2: {
-				menuadminpersonas();
-				break;
-			}
-			}
-		} while (opcion != 3);
+		switch (opcion) {
+		case 1: {
+			menuadminplantas();
+			break;
+		}
+		case 2: {
+			menuadminpersonas();
+			break;
+		}
+		case 3: {
+			facadePersonal.gestionEjemplaresmenu();
+		}
+		case 4: {
+			facadePersonal.gestionMensajesmenu();
+		}
+		case 5: {
+			facade.iniciosesion();
+		}			
+		case 6: {
+			Utilidades.salirdelprograma();
+		}
+		}
 	}
 
 	public void menuadminplantas() {
 		int opcion = -1;
-		do {
-			System.out.println("\n\n\n\n\n\t\t\t\tADMINISTRADOR VIVERO: PLANTAS\n");
+			System.out.println("\n\n\n\n\n\t\t\t\tGESTIÓN DE PLANTAS\n");
 			System.out.println("\t\t\t\t1 - AÑADIR PLANTA");
 			System.out.println("\t\t\t\t2 - MODIFICAR PLANTA");
 			System.out.println("\t\t\t\t3 - BORRAR PLANTA");
 			System.out.println("\t\t\t\t4 - CERRAR SESIÓN");
-			System.out.println("\t\t\t\t5 - VOLVER ATRÁS");
+			System.out.println("\t\t\t\t5 - SALIR DEL PROGRAMA");
+			System.out.println("\t\t\t\t6 - VOLVER ATRÁS");
 
-			opcion = facade.obtenerOpcionUsuario(5);
+			opcion = Utilidades.obtenerOpcionUsuario(6);
 
 			switch (opcion) {
 			case 1: {
@@ -81,18 +97,23 @@ public class InvernaderoFachadaAdmin {
 				;
 				break;
 			}
+			case 5: {
+				Utilidades.salirdelprograma();
 			}
-		} while (opcion != 5);
+			case 6: {
+				menuadmin();
+			}
+			}
 	}
 
 	public void menuadminpersonas() {
 		int opcion = -1;
 		do {
-			System.out.println("\n\n\n\n\n\t\t\t\tADMINISTRADOR VIVERO: PERSONAS\n");
+			System.out.println("\n\n\n\n\n\t\t\t\tGESTIÓN DE PERSONAS\n");
 			System.out.println("\t\t\t\t1 - REGISTRAR PERSONA");
 			System.out.println("\t\t\t\t2 - VOLVER ATRÁS");
 
-			opcion = facade.obtenerOpcionUsuario(2);
+			opcion = Utilidades.obtenerOpcionUsuario(2);
 
 			switch (opcion) {
 			case 1: {

@@ -2,12 +2,16 @@ package com.dwes.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Connection;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Utilidades {
+	
+	private static Connection con;
+	
     public static Date leerFecha() {
     	Scanner sc = new Scanner(System.in, "ISO-8859-1");
         Date ret = null;
@@ -80,7 +84,16 @@ public class Utilidades {
     }
     
     public static void salirdelprograma() {
-    	System.exit(0);
+        try {
+            // Cerrar la conexión antes de salir del programa
+            MySqlDAOFactory.getConexion().cerrarConexion();
+            System.out.println("SALIENDO DEL PROGRAMA...");
+        } catch (Exception e) {
+            System.err.println("Error al cerrar la conexión antes de salir.");
+            e.printStackTrace();
+        }
+        System.exit(0);
     }
+
 }
 

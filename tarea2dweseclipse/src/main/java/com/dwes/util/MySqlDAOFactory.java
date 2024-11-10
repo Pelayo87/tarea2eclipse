@@ -82,7 +82,7 @@ public class MySqlDAOFactory {
     }
 
     // Método para cerrar la conexión
-    public void closeConnection() {
+    public void cerrarConexion() {
         try {
             if (con != null && !con.isClosed()) {
                 con.close();

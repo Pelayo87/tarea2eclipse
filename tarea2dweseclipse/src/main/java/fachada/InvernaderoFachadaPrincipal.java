@@ -12,11 +12,12 @@ import com.dwes.util.Utilidades;
 import servicioImpl.ServicioCredencialesImpl;
 
 public class InvernaderoFachadaPrincipal {
-    private InvernaderoFachadaAdmin facadeAdmin;
-    private InvernaderoFachadaPersonal facadePersonal;
-    private InvernaderoFachadaInvitado facadeInvitado;
+    protected InvernaderoFachadaAdmin facadeAdmin;
+    protected InvernaderoFachadaPersonal facadePersonal;
+    protected InvernaderoFachadaInvitado facadeInvitado;
+    
     Scanner sc = new Scanner(System.in);
-    String nombreusuario;
+    protected static String nombreusuario;
     public long id_Persona;
     
     InvernaderoServiciosFactory factoryServicios = InvernaderoServiciosFactory.getServicios();
@@ -38,7 +39,7 @@ public class InvernaderoFachadaPrincipal {
 		System.out.println("\n\n\n\n\n\t\t\t\tINICIO DE SESIÓN O REGISTRARSE\n");
 		System.out.println("\t\t\t\t1 - LOGIN");
 		System.out.println("\t\t\t\t2 - ENTRAR COMO INVITADO");
-		System.out.println("\t\t\t\t3 - SALIR");
+		System.out.println("\t\t\t\t3 - SALIR DEL PROGRAMA");
 
 		opcion = Utilidades.obtenerOpcionUsuario(3);
 

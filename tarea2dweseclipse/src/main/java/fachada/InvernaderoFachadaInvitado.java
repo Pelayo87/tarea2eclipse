@@ -18,7 +18,7 @@ import com.dwes.util.InvernaderoServiciosFactory;
 import com.dwes.util.Utilidades;
 
 public class InvernaderoFachadaInvitado {
-	private InvernaderoFachadaPrincipal facade;
+	protected InvernaderoFachadaPrincipal facade;
 	Scanner sc = new Scanner(System.in);
     String nombreusuario;
     Persona usuarioActual;    

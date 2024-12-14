@@ -42,7 +42,6 @@ public class EjemplarDAOImpl implements EjemplarDAO {
             ps.setString(3, ejemplar.getCodigo());
             
             resultado = ps.executeUpdate();
-            System.out.println("Ejemplar insertado correctamente.");
         } catch (SQLException e) {
             System.out.println("Error al insertar el ejemplar: " + e.getMessage());
         }
@@ -59,7 +58,6 @@ public class EjemplarDAOImpl implements EjemplarDAO {
             ps.setLong(3, ejemplar.getId());
             
             resultado = ps.executeUpdate();
-            System.out.println("Ejemplar modificado correctamente.");
         } catch (SQLException e) {
             System.out.println("Error al modificar el ejemplar: " + e.getMessage());
         }

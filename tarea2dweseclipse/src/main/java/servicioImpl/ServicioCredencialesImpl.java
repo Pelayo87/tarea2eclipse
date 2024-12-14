@@ -64,6 +64,8 @@ public class ServicioCredencialesImpl implements ServicioCredenciales{
 	            System.err.println("La contraseña no puede ser nula o vacía. Inténtelo de nuevo.");
 	        } else if (password.length() < 8) {
 	            System.err.println("La contraseña debe tener al menos 8 caracteres. Inténtelo de nuevo.");
+	        } else if (password.contains(" ")) {
+	            System.err.println("La contraseña no puede contener espacios en blanco. Inténtelo de nuevo.");
 	        } else if (!password.matches(".*[!@#$%^&*(),.?\":{}|<>].*")) {
 	            System.err.println("La contraseña debe contener al menos un carácter especial. Inténtelo de nuevo.");
 	        } else {
@@ -71,6 +73,7 @@ public class ServicioCredencialesImpl implements ServicioCredenciales{
 	        }
 
 	    } while (!passwordCorrecto);
+
 	        credenciales.setUsuario(nombreUsuario);
 	        credenciales.setPassword(password);
 	        credenciales.setId_persona(PersonaDAOImpl.personaId);

@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.InputMismatchException;
@@ -77,8 +78,7 @@ public class InvernaderoFachadaPersonal {
 	
 	public void gestionEjemplaresmenu() {
 		int opcion = -1;
-		System.out.println(
-				"\n\n\n\n\n\t\t\t\tGESTIÓN DE EJEMPLARES" + " [Usuario actual:" + facade.nombreusuario + "]\n");
+		System.out.println("\n\n\n\n\n\t\t\t\tGESTIÓN DE EJEMPLARES" + " [Usuario actual:" + facade.nombreusuario + "]\n");
 		System.out.println("\t\t\t\t1 - AÑADIR NUEVO EJEMPLAR");
 		System.out.println("\t\t\t\t2 - FILTRAR EJEMPLAR/ES");
 		System.out.println("\t\t\t\t3 - VER MENSAJES DE UN EJEMPLAR");
@@ -349,46 +349,64 @@ public class InvernaderoFachadaPersonal {
 	}
 
 	private void filtrarEjemplarestipoplanta() {
-		Set<Planta> plantas = S_planta.find();
-		if (plantas.isEmpty()) {
-			System.out.println("No hay plantas disponibles en el sistema.");
-			return;
-		}
+	    Set<Planta> plantas = S_planta.find();
+	    if (plantas.isEmpty()) {
+	        System.out.println("No hay plantas disponibles en el sistema.");
+	        return;
+	    }
 
-		System.out.println("Selecciona el tipo de planta que deseas ver sus ejemplares:");
-		int index = 1;
-		for (Planta p : plantas) {
-			System.out.println(index + " - " + p.getNombrecomun());
-			index++;
-		}
-		try {
-			// Obtener la selección del usuario
-			int seleccion = sc.nextInt();
-			if (seleccion < 1 || seleccion > plantas.size()) {
-				System.out.println("Selección no válida.");
-				return;
-			}
+	    System.out.println("Selecciona el tipo de planta que deseas ver sus ejemplares (puedes seleccionar varias separando con comas):");
+	    int index = 1;
 
-			// Obtener el tipo de planta seleccionado
-			Planta tipoplanta = (Planta) plantas.toArray()[seleccion - 1];
-			String tipo_Planta = tipoplanta.getCodigo();
+	    // Mostrar lista de plantas disponibles
+	    for (Planta p : plantas) {
+	        System.out.println(index + " - " + p.getNombrecomun());
+	        index++;
+	    }
 
-			// Obtener todos los ejemplares del tipo de planta seleccionado
-			List<Ejemplar> ejemplaresTipoPlanta = S_ejemplar.findByPlanta(tipo_Planta);
-			if (ejemplaresTipoPlanta.isEmpty()) {
-				System.out.println("No hay ejemplares para el tipo de planta seleccionado.");
-				filtrarEjemplaresmenu();
-			} else {
-				for (Ejemplar ejemplar : ejemplaresTipoPlanta) {
-					System.out.println(ejemplar.toString());
-				}
-				filtrarEjemplaresmenu();
-			}
-		} catch (InputMismatchException e) {
-			System.out.println("Solo se permiten ingresar números, inténtalo de nuevo.");
-			sc.nextLine();
-		}
+	    try {
+	        String input = sc.nextLine();
+	        String[] selecciones = input.split(",");
+
+	        Set<String> codigosPlantaSeleccionados = new HashSet<>();
+
+	        // Validar y obtener los códigos de planta seleccionados
+	        for (String sel : selecciones) {
+	            int seleccion = Integer.parseInt(sel.trim());
+	            if (seleccion < 1 || seleccion > plantas.size()) {
+	                System.out.println("Selección no válida. Inténtalo de nuevo.");
+	                filtrarEjemplarestipoplanta();
+	            }
+	            Planta plantaSeleccionada = (Planta) plantas.toArray()[seleccion - 1];
+	            codigosPlantaSeleccionados.add(plantaSeleccionada.getCodigo());
+	        }
+
+	        // Buscar ejemplares de todos los tipos de plantas seleccionados
+	        List<Ejemplar> ejemplaresFiltrados = new ArrayList<>();
+	        for (String codigoPlanta : codigosPlantaSeleccionados) {
+	            ejemplaresFiltrados.addAll(S_ejemplar.findByPlanta(codigoPlanta));
+	        }
+
+	        // Mostrar resultados
+	        if (ejemplaresFiltrados.isEmpty()) {
+	            System.out.println("No hay ejemplares para los tipos de plantas seleccionados.");
+	        } else {
+	            System.out.println("\nEjemplares encontrados:");
+	            for (Ejemplar ejemplar : ejemplaresFiltrados) {
+	                System.out.println(ejemplar.toString());
+	            }
+	        }
+
+	        filtrarEjemplaresmenu(); 
+	    } catch (NumberFormatException e) {
+	        System.err.println("Error: Entrada inválida. Solo se permiten números separados por comas.");
+	        filtrarEjemplarestipoplanta();
+	    } catch (InputMismatchException e) {
+	        System.err.println("Error: Entrada inválida. Inténtalo de nuevo.");
+	        filtrarEjemplarestipoplanta();
+	    }
 	}
+
 
 	// MÉTODOS PARA LA GESTIÓN DE MENSAJES
 
@@ -410,7 +428,7 @@ public class InvernaderoFachadaPersonal {
 		try {
 			// Obtener la selección del usuario
 			int seleccion = sc.nextInt();
-			sc.nextLine(); // Consumir el salto de línea restante
+			sc.nextLine();
 
 			if (seleccion < 1 || seleccion > ejemplares.size()) {
 				System.out.println("Selección no válida.");

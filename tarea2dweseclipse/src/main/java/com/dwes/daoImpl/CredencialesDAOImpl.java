@@ -52,13 +52,12 @@ public class CredencialesDAOImpl implements CredencialesDAO{
     public int modificar(Credenciales credenciales) {
         int resultado = 0;
         try {
-            ps = con.prepareStatement("UPDATE credenciales SET usuario = ?, password = ? WHERE id = ?");
+            ps = con.prepareStatement("UPDATE credenciales SET usuario = ?, password = ? WHERE id_persona = ?");
             ps.setString(1, credenciales.getUsuario());
             ps.setString(2, credenciales.getPassword());
-            ps.setLong(3, credenciales.getId());
+            ps.setLong(3, credenciales.getId_persona());
 
             resultado = ps.executeUpdate();
-            System.out.println("Credenciales modificadas correctamente.");
         } catch (SQLException e) {
             System.out.println("Error al modificar las credenciales: " + e.getMessage());
         }
@@ -73,7 +72,6 @@ public class CredencialesDAOImpl implements CredencialesDAO{
             ps.setLong(1, credenciales.getId());
 
             resultado = ps.executeUpdate();
-            System.out.println("Credenciales eliminadas correctamente.");
         } catch (SQLException e) {
             System.out.println("Error al eliminar las credenciales: " + e.getMessage());
         }

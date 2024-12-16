@@ -70,7 +70,6 @@ public class PersonaDAOImpl implements PersonaDAO{
             ps.setLong(3, persona.getId());
             
             resultado = ps.executeUpdate();
-            System.out.println("Persona modificada correctamente.");
         } catch (SQLException e) {
             System.out.println("Error al modificar la persona: " + e.getMessage());
         }
@@ -85,7 +84,6 @@ public class PersonaDAOImpl implements PersonaDAO{
             ps.setLong(1, persona.getId());
             
             resultado = ps.executeUpdate();
-            System.out.println("Persona eliminada correctamente.");
         } catch (SQLException e) {
             System.out.println("Error al eliminar la persona: " + e.getMessage());
         }

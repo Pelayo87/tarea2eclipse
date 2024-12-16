@@ -8,10 +8,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import com.dwes.dao.EjemplarDAO;
 import com.dwes.modelo.Ejemplar;
-import com.dwes.modelo.Planta;
 
 /**
  * Implementación de la interfaz EjemplarDAO para la gestión de objetos Ejemplar en la base de datos.

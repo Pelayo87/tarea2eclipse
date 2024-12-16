@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 import com.dwes.dao.PlantaDAO;
-import com.dwes.modelo.Ejemplar;
 import com.dwes.modelo.Planta;
 
 /**
@@ -94,8 +93,23 @@ public class PlantaDAOImpl implements PlantaDAO{
 
 	@Override
 	public Planta findByNombre(String nombrecomun) {
-		return null;
+	    Planta planta = null;
+	    try {
+	        ps = con.prepareStatement("SELECT * FROM planta WHERE nombrecomun = ?");
+	        ps.setString(1, nombrecomun);
+	        rs = ps.executeQuery();
+
+	        if (rs.next()) {
+	            String codigo = rs.getString("codigo");
+	            String nombrecientifico = rs.getString("nombrecientifico");
+	            planta = new Planta(codigo, nombrecomun, nombrecientifico);
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error al buscar la planta por nombre común: " + e.getMessage());
+	    }
+	    return planta;
 	}
+
 	
 	@Override
 	public Set<Planta> find() {

@@ -2,7 +2,6 @@ package com.dwes.dao;
 
 import java.util.Set;
 import com.dwes.modelo.Planta;
-import com.dwes.modelo.Ejemplar;
 
 public interface PlantaDAO {
     int insertar(Planta planta);

@@ -135,9 +135,12 @@ public class InvernaderoFachadaAdmin {
 		System.out.println("\t\t\t\t2 - MODIFICAR PERSONA");
 		System.out.println("\t\t\t\t3 - ELIMINAR PERSONA");
 		System.out.println("\t\t\t\t4 - BUSCAR DATOS PERSONA POR ID");
-		System.out.println("\t\t\t\t5 - VOLVER ATRÁS");
+		System.out.println("\t\t\t\t5 - BUSCAR DATOS PERSONA POR NOMBRE PERSONA");
+		System.out.println("\t\t\t\t6 - VOLVER ATRÁS");
+		System.out.println("\t\t\t\t7 - CERRAR SESIÓN");
+		System.out.println("\t\t\t\t8 - SALIR DEL PROGRAMA");
 
-		opcion = Utilidades.obtenerOpcionUsuario(5);
+		opcion = Utilidades.obtenerOpcionUsuario(8);
 
 		switch (opcion) {
 		case 1: {
@@ -170,7 +173,31 @@ public class InvernaderoFachadaAdmin {
             menuadminpersonas();
 		}
 		case 5: {
+			System.out.println("Introduce el nombre de la persona de la que quieres ver los datos:");
+            String nombrePersona = sc.nextLine().toUpperCase();
+            Persona personaByNombre = S_persona.findByNombre(nombrePersona);
+            long idPersona = personaByNombre.getId();
+            Credenciales credencialesById = S_credenciales.findByPersonaId(idPersona);
+            if (personaByNombre != null && credencialesById != null) {
+            	System.out.println("\n--- DATOS DE LA PERSONA ---");
+                System.out.println("ID:       " + personaByNombre.getId());
+                System.out.println("Nombre:   " + personaByNombre.getNombre());
+                System.out.println("Usuario:  " + credencialesById.getUsuario());
+                System.out.println("Password: " + credencialesById.getPassword());
+                System.out.println("Email:    " + personaByNombre.getEmail());
+            } else {
+                System.out.println("No se encontró ninguna planta con el código: " + idPersona);
+            }
+            menuadminpersonas();
+		}
+		case 6: {
 			menuadmin();
+		}
+		case 7: {
+			facade.iniciosesion();
+		}
+		case 8: {
+			Utilidades.salirdelprograma();
 		}
 		}
 

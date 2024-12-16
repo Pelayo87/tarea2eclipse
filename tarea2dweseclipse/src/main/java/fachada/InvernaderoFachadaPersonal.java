@@ -149,12 +149,14 @@ public class InvernaderoFachadaPersonal {
 		int opcion = -1;
 			System.out.println("\n\n\n\n\n\t\t\t\tGESTION DE MENSAJES/ANOTACIONES" + " [Usuario actual:" +facade.nombreusuario + "]\n");
 			System.out.println("\t\t\t\t1 - REALIZAR ANOTACIONES EN FORMA DE MENSAJES");
-			System.out.println("\t\t\t\t2 - MOSTRAR TODOS LOS MENSAJES/ANOTACIONES");
-			System.out.println("\t\t\t\t3 - FILTRAR ANOTACIONES/MENSAJES");
-			System.out.println("\t\t\t\t4 - VOLVER ATRÁS");
-			System.out.println("\t\t\t\t5 - SALIR DEL PROGRAMA");
+			System.out.println("\t\t\t\t2 - MODIFICAR ANOTACIONES/MENSAJES DE UN EJEMPLAR");
+			System.out.println("\t\t\t\t2 - ELIMINAR ANOTACIONES/MENSAJES DE UN EJEMPLAR");
+			System.out.println("\t\t\t\t3 - MOSTRAR TODOS LOS MENSAJES/ANOTACIONES");
+			System.out.println("\t\t\t\t4 - FILTRAR ANOTACIONES/MENSAJES");
+			System.out.println("\t\t\t\t5 - VOLVER ATRÁS");
+			System.out.println("\t\t\t\t6 - SALIR DEL PROGRAMA");
 
-			opcion = Utilidades.obtenerOpcionUsuario(5);
+			opcion = Utilidades.obtenerOpcionUsuario(7);
 
 			switch (opcion) {
 			case 1: {
@@ -162,20 +164,27 @@ public class InvernaderoFachadaPersonal {
 				break;
 			}
 			case 2: {
-				mostrarAnotaciones();
+				modificarAnotaciones();
 				break;
 			}
 			case 3: {
-				filtrarAnotacionesmenu();
+				borrarAnotaciones();
 			}
 			case 4: {
+				mostrarAnotaciones();
+				break;
+			}
+			case 5: {
+				filtrarAnotacionesmenu();
+			}
+			case 6: {
 				if ("admin".equalsIgnoreCase(facade.nombreusuario)) {
 					facade.facadeAdmin.menuadmin();
 				} else {
 					menu();
 				}
 			}
-			case 5: {
+			case 7: {
 				Utilidades.salirdelprograma();
 			}
 			}
@@ -458,6 +467,185 @@ public class InvernaderoFachadaPersonal {
 		}
 		
 	}
+	
+	private void modificarAnotaciones() {
+	    Set<Ejemplar> ejemplares = S_ejemplar.findAll();
+
+	    if (ejemplares.isEmpty()) {
+	        System.out.println("No hay ejemplares de plantas disponibles en el sistema.");
+	        gestionMensajesmenu();
+	        return;
+	    }
+
+	    System.out.println("Selecciona el ejemplar del que deseas modificar una anotación:");
+	    int index = 1;
+	    for (Ejemplar e : ejemplares) {
+	        System.out.println(index + " - " + e.getNombre());
+	        index++;
+	    }
+
+	    // Validar la selección del ejemplar
+	    int seleccion = -1;
+	    while (seleccion < 1 || seleccion > ejemplares.size()) {
+	        try {
+	            seleccion = Integer.parseInt(sc.nextLine());
+	            if (seleccion < 1 || seleccion > ejemplares.size()) {
+	                System.out.println("Selección no válida. Por favor, elige un número entre 1 y " + ejemplares.size());
+	            }
+	        } catch (NumberFormatException e) {
+	            System.out.println("Solo se permiten ingresar números, inténtalo de nuevo.");
+	        }
+	    }
+
+	    Ejemplar ejemplar = (Ejemplar) ejemplares.toArray()[seleccion - 1];
+	    long idEjemplar = ejemplar.getId();
+
+	    // Obtener las anotaciones de ese ejemplar
+	    Set<Mensaje> anotaciones = S_mensaje.findByEjemplarId(idEjemplar);
+
+	    if (anotaciones.isEmpty()) {
+	        System.out.println("No hay anotaciones para este ejemplar.");
+	        return;
+	    }
+
+	    System.out.println("Selecciona la anotación que deseas modificar:");
+	    index = 1;
+	    for (Mensaje m : anotaciones) {
+	        System.out.println(index + " - " + m.getMensaje());
+	        index++;
+	    }
+
+	    // Validar la selección de la anotación
+	    int seleccionAnotacion = -1;
+	    while (seleccionAnotacion < 1 || seleccionAnotacion > anotaciones.size()) {
+	        try {
+	            seleccionAnotacion = Integer.parseInt(sc.nextLine());
+	            if (seleccionAnotacion < 1 || seleccionAnotacion > anotaciones.size()) {
+	                System.out.println("Selección no válida. Por favor, elige un número entre 1 y " + anotaciones.size());
+	            }
+	        } catch (NumberFormatException e) {
+	            System.out.println("Solo se permiten ingresar números, inténtalo de nuevo.");
+	        }
+	    }
+
+	    Mensaje anotacionSeleccionada = (Mensaje) anotaciones.toArray()[seleccionAnotacion - 1];
+
+	    // Mostrar la anotación actual y permitir la modificación
+	    System.out.println("La anotación actual es: " + anotacionSeleccionada.getMensaje());
+	    System.out.println("Escribe el nuevo texto para la anotación:");
+
+	    String nuevaAnotacion = sc.nextLine().trim();
+
+	    if (nuevaAnotacion.isEmpty()) {
+	        System.out.println("La anotación no puede estar vacía.");
+	        return;
+	    }
+
+	    // Modifico la anotación y actualizo la fecha a la de su modificación
+	    anotacionSeleccionada.setMensaje(nuevaAnotacion);
+	    anotacionSeleccionada.setFechahora(fechaActual); 
+
+	    try {
+	        S_mensaje.modificar(anotacionSeleccionada);
+	        System.out.println("La anotación ha sido modificada correctamente.");
+	    } catch (Exception e) {
+	        System.err.println("Hubo un error al modificar la anotación: " + e.getMessage());
+	    }
+	    gestionMensajesmenu();
+	}
+	
+	private void borrarAnotaciones(){	   
+	    Set<Ejemplar> ejemplares = S_ejemplar.findAll();
+
+	    if (ejemplares.isEmpty()) {
+	        System.out.println("No hay ejemplares de plantas disponibles en el sistema.");
+	        gestionMensajesmenu();
+	        return;
+	    }
+
+	    System.out.println("Selecciona el ejemplar del que deseas borrar una anotación:");
+	    int index = 1;
+	    for (Ejemplar e : ejemplares) {
+	        System.out.println(index + " - " + e.getNombre());
+	        index++;
+	    }
+
+	    // Validar la selección del ejemplar
+	    int seleccion = -1;
+	    while (seleccion < 1 || seleccion > ejemplares.size()) {
+	        try {
+	            seleccion = Integer.parseInt(sc.nextLine());
+	            if (seleccion < 1 || seleccion > ejemplares.size()) {
+	                System.out.println("Selección no válida. Por favor, elige un número entre 1 y " + ejemplares.size());
+	            }
+	        } catch (NumberFormatException e) {
+	            System.out.println("Solo se permiten ingresar números, inténtalo de nuevo.");
+	        }
+	    }
+
+	    Ejemplar ejemplar = (Ejemplar) ejemplares.toArray()[seleccion - 1];
+	    long idEjemplar = ejemplar.getId();
+
+	    // Obtener las anotaciones de ese ejemplar
+	    Set<Mensaje> anotaciones = S_mensaje.findByEjemplarId(idEjemplar);
+
+	    if (anotaciones.isEmpty()) {
+	        System.out.println("No hay anotaciones para este ejemplar.");
+	        return;
+	    }
+
+	    // Mostrar las anotaciones disponibles
+	    System.out.println("Selecciona la anotación que deseas borrar:");
+	    index = 1;
+	    for (Mensaje m : anotaciones) {
+	        System.out.println(index + " - " + m.getMensaje());
+	        index++;
+	    }
+
+	    // Validar la selección de la anotación
+	    int seleccionAnotacion = -1;
+	    while (seleccionAnotacion < 1 || seleccionAnotacion > anotaciones.size()) {
+	        try {
+	            seleccionAnotacion = Integer.parseInt(sc.nextLine());
+	            if (seleccionAnotacion < 1 || seleccionAnotacion > anotaciones.size()) {
+	                System.out.println("Selección no válida. Por favor, elige un número entre 1 y " + anotaciones.size());
+	            }
+	        } catch (NumberFormatException e) {
+	            System.out.println("Solo se permiten ingresar números, inténtalo de nuevo.");
+	        }
+	    }
+
+	    Mensaje anotacionSeleccionada = (Mensaje) anotaciones.toArray()[seleccionAnotacion - 1];
+
+	    // Confirmo si el usuario está seguro de eliminar la anotación
+	    System.out.println("Estás seguro de que deseas borrar la siguiente anotación?");
+	    System.out.println("Anotación: " + anotacionSeleccionada.getMensaje());
+	    System.out.println("1 - Sí");
+	    System.out.println("2 - No");
+
+	    int confirmacion = -1;
+	    while (confirmacion != 1 && confirmacion != 2) {
+	        try {
+	            confirmacion = Integer.parseInt(sc.nextLine());
+	            if (confirmacion == 1) {
+	                try {
+	                    S_mensaje.eliminar(anotacionSeleccionada);
+	                } catch (Exception e) {
+	                    System.err.println("Hubo un error al eliminar la anotación: " + e.getMessage());
+	                }
+	            } else if (confirmacion == 2) {
+	                System.out.println("La eliminación de la anotación ha sido cancelada.");
+	            } else {
+	                System.out.println("Opción no válida. Por favor, ingresa 1 para sí o 2 para no.");
+	            }
+	        } catch (NumberFormatException e) {
+	            System.out.println("Solo se permiten ingresar números, inténtalo de nuevo.");
+	        }
+	    }
+	    gestionMensajesmenu();
+	}
+
+
 
 	private void mostrarAnotaciones() {
 		Set<Mensaje> mensajes = S_mensaje.findAll();

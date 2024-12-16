@@ -61,11 +61,9 @@ public class InvernaderoFachadaPersonal {
 			switch (opcion) {
 			case 1: {
 				gestionEjemplaresmenu();
-				break;
 			}
 			case 2: {
 				gestionMensajesmenu();
-				break;
 			}
 			case 3: {
 				facade.iniciosesion();
@@ -80,38 +78,48 @@ public class InvernaderoFachadaPersonal {
 		int opcion = -1;
 		System.out.println("\n\n\n\n\n\t\t\t\tGESTIÓN DE EJEMPLARES" + " [Usuario actual:" + facade.nombreusuario + "]\n");
 		System.out.println("\t\t\t\t1 - AÑADIR NUEVO EJEMPLAR");
-		System.out.println("\t\t\t\t2 - FILTRAR EJEMPLAR/ES");
-		System.out.println("\t\t\t\t3 - VER MENSAJES DE UN EJEMPLAR");
-		System.out.println("\t\t\t\t4 - VOLVER ATRÁS");
-		System.out.println("\t\t\t\t5 - CERRAR SESIÓN");
-		System.out.println("\t\t\t\t6 - SALIR DEL PROGRAMA");
+		System.out.println("\t\t\t\t2 - MODIFICAR EJEMPLAR");
+		System.out.println("\t\t\t\t3 - BORRAR EJEMPLAR");
+		System.out.println("\t\t\t\t4 - FILTRAR EJEMPLAR/ES");
+		System.out.println("\t\t\t\t5 - VER MENSAJES DE UN EJEMPLAR");
+		System.out.println("\t\t\t\t6 - REGISTRO RIEGO DE UN EJEMPLAR");
+		System.out.println("\t\t\t\t7 - VOLVER ATRÁS");
+		System.out.println("\t\t\t\t8 - CERRAR SESIÓN");
+		System.out.println("\t\t\t\t9 - SALIR DEL PROGRAMA");
 
-		opcion = Utilidades.obtenerOpcionUsuario(6);
+		opcion = Utilidades.obtenerOpcionUsuario(9);
 
 		switch (opcion) {
 		case 1: {
 			registrarEjemplar();
-			break;
 		}
 		case 2: {
-			filtrarEjemplaresmenu();
-			break;
+			modificarEjemplar();
 		}
 		case 3: {
-			vermensajesEjemplar();
-			break;
+			borrarEjemplar();
 		}
 		case 4: {
+			filtrarEjemplaresmenu();
+		}
+		case 5: {
+			vermensajesEjemplar();
+		}
+		case 6: {
+			registrarRiego();
+			gestionEjemplaresmenu();
+		}
+		case 7: {
 			if ("admin".equalsIgnoreCase(facade.nombreusuario)) {
 				facade.facadeAdmin.menuadmin();
 			} else {
 				menu();
 			}
 		}
-		case 5: {
+		case 8: {
 			facade.iniciosesion();
 		}
-		case 6: {
+		case 9: {
 			Utilidades.salirdelprograma();
 		}
 		}
@@ -130,14 +138,15 @@ public class InvernaderoFachadaPersonal {
 			switch (opcion) {
 			case 1: {
 				filtrarEjemplarestodos();
-				break;
+				filtrarEjemplaresmenu();
 			}
 			case 2: {
 				filtrarEjemplarestipoplanta();
-				break;
+				filtrarEjemplaresmenu();
 			}
 			case 3: {
 				gestionEjemplaresmenu();
+				filtrarEjemplaresmenu();
 			}
 			case 4: {
 				Utilidades.salirdelprograma();
@@ -294,6 +303,105 @@ public class InvernaderoFachadaPersonal {
 			sc.nextLine();
 		}
 	}
+	
+	private void modificarEjemplar() {
+		Set<Ejemplar> ejemplares = S_ejemplar.findAll();
+		if (ejemplares.isEmpty()) {
+			System.out.println("No hay ejemplares de plantas disponibles en el sistema.");
+			gestionEjemplaresmenu();
+		}
+
+		System.out.println("Selecciona el ejemplar que deseas modificar:");
+		int index = 1;
+		for (Ejemplar e : ejemplares) {
+			System.out.println(index + " - " + e.getNombre());
+			index++;
+		}
+
+		try {
+			int seleccion = sc.nextInt();
+			sc.nextLine();
+			
+			if (seleccion < 1 || seleccion > ejemplares.size()) {
+				System.out.println("Selección no válida.");
+				return;
+			}
+
+			Ejemplar ejemplarModificar = (Ejemplar) ejemplares.toArray()[seleccion - 1];
+			
+			Set<Planta> plantas = S_planta.find();
+			System.out.println("Selecciona el nuevo tipo de planta:");
+			index = 1;
+			for (Planta p : plantas) {
+				System.out.println(index + " - " + p.getNombrecomun());
+				index++;
+			}
+
+			int seleccionPlanta = sc.nextInt();
+			if (seleccionPlanta < 1 || seleccionPlanta > plantas.size()) {
+				System.out.println("Selección no válida.");
+				return;
+			}
+
+			Planta nuevaPlanta = (Planta) plantas.toArray()[seleccionPlanta - 1];
+			String nuevoCodigo = nuevaPlanta.getCodigo();
+			String nuevoNombre = nuevoCodigo + "_" + ejemplarModificar.getId();
+
+			Ejemplar ejemplarActualizado = new Ejemplar(ejemplarModificar.getId(), nuevoNombre, nuevoCodigo);
+			S_ejemplar.modificar(ejemplarActualizado);
+			
+			Mensaje mensajeModificacion = new Mensaje();
+			mensajeModificacion.setFechahora(fechaActual);
+			mensajeModificacion.setMensaje("Ejemplar modificado por " + facade.nombreusuario + " el " + fechaFormateada);
+			mensajeModificacion.setId_ejemplar(ejemplarModificar.getId());
+			mensajeModificacion.setId_persona(facade.id_Persona);
+			S_mensaje.insertar(mensajeModificacion);
+
+			System.out.println("Ejemplar modificado correctamente.");
+			gestionEjemplaresmenu();
+		} catch (InputMismatchException e) {
+			System.out.println("Solo se permiten ingresar números, inténtalo de nuevo.");
+			sc.nextLine();
+		}
+	}
+	
+	private void borrarEjemplar() {
+		Set<Ejemplar> ejemplares = S_ejemplar.findAll();
+		if (ejemplares.isEmpty()) {
+			System.out.println("No hay ejemplares de plantas disponibles en el sistema.");
+			gestionEjemplaresmenu();
+		}
+		
+		System.out.println("Selecciona el ejemplar que deseas eliminar:");
+		int index = 1;
+		for (Ejemplar e : ejemplares) {
+			System.out.println(index + " - " + e.getNombre());
+			index++;
+		}
+		
+		try {
+			int seleccion = sc.nextInt();
+			if (seleccion < 1 || seleccion > ejemplares.size()) {
+				System.out.println("Selección no válida.");
+				return;
+			}
+			Ejemplar ejemplarEliminar = (Ejemplar) ejemplares.toArray()[seleccion - 1];
+			
+			System.out.println("¿Estás seguro de que deseas eliminar el ejemplar " + ejemplarEliminar.getNombre() + "? (S/N)");
+			sc.nextLine();
+			String confirmacion = sc.nextLine();
+			
+			if (confirmacion.equalsIgnoreCase("S")) {
+				S_ejemplar.eliminar(ejemplarEliminar);
+				System.out.println("Ejemplar eliminado correctamente.");
+			} else {
+				System.out.println("Operación cancelada.");
+			}		gestionEjemplaresmenu();
+		} catch (InputMismatchException e) {
+			System.out.println("Solo se permiten ingresar números, inténtalo de nuevo.");
+			sc.nextLine();
+		}
+	}
 
 	private void vermensajesEjemplar() {
 		Set<Ejemplar> ejemplares = S_ejemplar.findAll();
@@ -414,6 +522,48 @@ public class InvernaderoFachadaPersonal {
 	        System.err.println("Error: Entrada inválida. Inténtalo de nuevo.");
 	        filtrarEjemplarestipoplanta();
 	    }
+	}
+	
+	private void registrarRiego() {
+		Set<Ejemplar> ejemplares = S_ejemplar.findAll();
+		if (ejemplares.isEmpty()) {
+			System.out.println("No hay ejemplares disponibles.");
+			registrarRiego();
+		}
+
+		System.out.println("Selecciona el ejemplar que has regado:");
+		int index = 1;
+		for (Ejemplar e : ejemplares) {
+			System.out.println(index + " - " + e.getNombre());
+			index++;
+		}
+
+		try {
+			int seleccion = sc.nextInt();
+			sc.nextLine();
+			if (seleccion < 1 || seleccion > ejemplares.size()) {
+				System.out.println("Selección no válida.");
+				registrarRiego();
+			}
+
+			Ejemplar ejemplar = (Ejemplar) ejemplares.toArray()[seleccion - 1];
+
+			System.out.println("Cantidad de agua utilizada (en litros):");
+			double cantidadAgua = sc.nextDouble();
+			sc.nextLine();
+
+			Mensaje mensajeRiego = new Mensaje();
+			mensajeRiego.setFechahora(fechaActual);
+			mensajeRiego.setMensaje("Riego realizado - Cantidad: " + cantidadAgua + "L");
+			mensajeRiego.setId_ejemplar(ejemplar.getId());
+			mensajeRiego.setId_persona(facade.id_Persona);
+
+			S_mensaje.insertar(mensajeRiego);
+			System.out.println("Riego registrado correctamente.");
+		} catch (InputMismatchException e) {
+			System.out.println("Entrada no válida.");
+			sc.nextLine();
+		}
 	}
 
 
@@ -699,7 +849,7 @@ public class InvernaderoFachadaPersonal {
 	}
 
 	private void filtrarAnotacionesporTipoPlanta() {
-	    Set<Planta> listaPlantas = S_planta.find(); // Obtener todas las plantas disponibles
+	    Set<Planta> listaPlantas = S_planta.find();
 
 	    System.out.println("Selecciona el tipo de planta del que quieres ver anotaciones:");
 	    int index = 1;
@@ -711,21 +861,17 @@ public class InvernaderoFachadaPersonal {
 	    }
 
 	    try {
-	        // Obtener la selección del usuario
 	        int seleccion = sc.nextInt();
 	        if (seleccion < 1 || seleccion > listaPlantas.size()) {
 	            System.err.println("Selección no válida. Inténtalo de nuevo.");
 	            filtrarAnotacionesporTipoPlanta();
 	        }
 
-	        // Obtener la planta seleccionada
 	        Planta plantaSeleccionada = (Planta) listaPlantas.toArray()[seleccion - 1];
 	        String codigoPlanta = plantaSeleccionada.getCodigo();
 
-	        // Buscar los ejemplares asociados al código de planta seleccionado
 	        List<Ejemplar> ejemplaresDePlanta = S_ejemplar.findByPlanta(codigoPlanta);
 
-	        // Obtener y mostrar todas las anotaciones relacionadas con esos ejemplares
 	        Set<Mensaje> anotacionesPorPlanta = new HashSet<>();
 	        for (Ejemplar ejemplar : ejemplaresDePlanta) {
 	            anotacionesPorPlanta.addAll(S_mensaje.findByEjemplarId(ejemplar.getId()));

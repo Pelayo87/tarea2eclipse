@@ -281,4 +281,22 @@ public class InvernaderoFachadaAdmin {
 	        System.out.println("Error: ID inválido. Introduce un número válido.");
 	    }
 	}
+	
+	/*private void buscarPersonaPorInicial() {
+		System.out.println("Introduce la inicial por la que quieres buscar personas:");
+		String inicial = sc.nextLine().toUpperCase();
+		if(inicial.length() == 1) {
+			java.util.List<Persona> personas = S_persona.findByInicial(inicial);
+			if(personas != null && !personas.isEmpty()) {
+				System.out.println("\nPersonas encontradas que empiezan por '" + inicial + "':");
+				for(Persona p : personas) {
+					System.out.println("ID: " + p.getId() + " - Nombre: " + p.getNombre() + " - Email: " + p.getEmail());
+				}
+			} else {
+				System.out.println("No se encontraron personas que empiecen por la letra '" + inicial + "'");
+			}
+		} else {
+			System.out.println("Por favor, introduce una única letra.");
+		}
+	}*/
 }
